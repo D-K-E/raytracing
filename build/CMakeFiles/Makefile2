@@ -65,13 +65,50 @@ CMAKE_SOURCE_DIR = /media/kaan/Data7510/GitProjects/raytracing
 CMAKE_BINARY_DIR = /media/kaan/Data7510/GitProjects/raytracing/build
 
 #=============================================================================
+# Target rules for target CMakeFiles/ppmgostergeli.out.dir
+
+# All Build rule for target.
+CMakeFiles/ppmgostergeli.out.dir/all:
+	$(MAKE) -f CMakeFiles/ppmgostergeli.out.dir/build.make CMakeFiles/ppmgostergeli.out.dir/depend
+	$(MAKE) -f CMakeFiles/ppmgostergeli.out.dir/build.make CMakeFiles/ppmgostergeli.out.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/media/kaan/Data7510/GitProjects/raytracing/build/CMakeFiles --progress-num=1,2 "Built target ppmgostergeli.out"
+.PHONY : CMakeFiles/ppmgostergeli.out.dir/all
+
+# Include target in all.
+all: CMakeFiles/ppmgostergeli.out.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/ppmgostergeli.out.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /media/kaan/Data7510/GitProjects/raytracing/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/ppmgostergeli.out.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /media/kaan/Data7510/GitProjects/raytracing/build/CMakeFiles 0
+.PHONY : CMakeFiles/ppmgostergeli.out.dir/rule
+
+# Convenience name for target.
+ppmgostergeli.out: CMakeFiles/ppmgostergeli.out.dir/rule
+
+.PHONY : ppmgostergeli.out
+
+# clean rule for target.
+CMakeFiles/ppmgostergeli.out.dir/clean:
+	$(MAKE) -f CMakeFiles/ppmgostergeli.out.dir/build.make CMakeFiles/ppmgostergeli.out.dir/clean
+.PHONY : CMakeFiles/ppmgostergeli.out.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/ppmgostergeli.out.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
 # Target rules for target CMakeFiles/ppmresim.out.dir
 
 # All Build rule for target.
 CMakeFiles/ppmresim.out.dir/all:
 	$(MAKE) -f CMakeFiles/ppmresim.out.dir/build.make CMakeFiles/ppmresim.out.dir/depend
 	$(MAKE) -f CMakeFiles/ppmresim.out.dir/build.make CMakeFiles/ppmresim.out.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/media/kaan/Data7510/GitProjects/raytracing/build/CMakeFiles --progress-num=1,2 "Built target ppmresim.out"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/media/kaan/Data7510/GitProjects/raytracing/build/CMakeFiles --progress-num=3,4 "Built target ppmresim.out"
 .PHONY : CMakeFiles/ppmresim.out.dir/all
 
 # Include target in all.
@@ -98,6 +135,43 @@ CMakeFiles/ppmresim.out.dir/clean:
 
 # clean rule for target.
 clean: CMakeFiles/ppmresim.out.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/ppmsonhal.out.dir
+
+# All Build rule for target.
+CMakeFiles/ppmsonhal.out.dir/all:
+	$(MAKE) -f CMakeFiles/ppmsonhal.out.dir/build.make CMakeFiles/ppmsonhal.out.dir/depend
+	$(MAKE) -f CMakeFiles/ppmsonhal.out.dir/build.make CMakeFiles/ppmsonhal.out.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/media/kaan/Data7510/GitProjects/raytracing/build/CMakeFiles --progress-num=5,6 "Built target ppmsonhal.out"
+.PHONY : CMakeFiles/ppmsonhal.out.dir/all
+
+# Include target in all.
+all: CMakeFiles/ppmsonhal.out.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/ppmsonhal.out.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /media/kaan/Data7510/GitProjects/raytracing/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/ppmsonhal.out.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /media/kaan/Data7510/GitProjects/raytracing/build/CMakeFiles 0
+.PHONY : CMakeFiles/ppmsonhal.out.dir/rule
+
+# Convenience name for target.
+ppmsonhal.out: CMakeFiles/ppmsonhal.out.dir/rule
+
+.PHONY : ppmsonhal.out
+
+# clean rule for target.
+CMakeFiles/ppmsonhal.out.dir/clean:
+	$(MAKE) -f CMakeFiles/ppmsonhal.out.dir/build.make CMakeFiles/ppmsonhal.out.dir/clean
+.PHONY : CMakeFiles/ppmsonhal.out.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/ppmsonhal.out.dir/clean
 
 .PHONY : clean
 

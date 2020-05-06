@@ -80,6 +80,28 @@ install/local/fast: preinstall/fast
 	/home/kaan/miniconda3/envs/dev-cpp/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
 .PHONY : install/local/fast
 
+# Special rule for the target install
+install: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/home/kaan/miniconda3/envs/dev-cpp/bin/cmake -P cmake_install.cmake
+.PHONY : install
+
+# Special rule for the target install
+install/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/home/kaan/miniconda3/envs/dev-cpp/bin/cmake -P cmake_install.cmake
+.PHONY : install/fast
+
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+
+.PHONY : list_install_components/fast
+
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
@@ -101,28 +123,6 @@ rebuild_cache:
 rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
-
-# Special rule for the target list_install_components
-list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
-.PHONY : list_install_components
-
-# Special rule for the target list_install_components
-list_install_components/fast: list_install_components
-
-.PHONY : list_install_components/fast
-
-# Special rule for the target install
-install: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/home/kaan/miniconda3/envs/dev-cpp/bin/cmake -P cmake_install.cmake
-.PHONY : install
-
-# Special rule for the target install
-install/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/home/kaan/miniconda3/envs/dev-cpp/bin/cmake -P cmake_install.cmake
-.PHONY : install/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -157,6 +157,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named ppmgostergeli.out
+
+# Build rule for target.
+ppmgostergeli.out: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 ppmgostergeli.out
+.PHONY : ppmgostergeli.out
+
+# fast build rule for target.
+ppmgostergeli.out/fast:
+	$(MAKE) -f CMakeFiles/ppmgostergeli.out.dir/build.make CMakeFiles/ppmgostergeli.out.dir/build
+.PHONY : ppmgostergeli.out/fast
+
+#=============================================================================
 # Target rules for targets named ppmresim.out
 
 # Build rule for target.
@@ -168,6 +181,19 @@ ppmresim.out: cmake_check_build_system
 ppmresim.out/fast:
 	$(MAKE) -f CMakeFiles/ppmresim.out.dir/build.make CMakeFiles/ppmresim.out.dir/build
 .PHONY : ppmresim.out/fast
+
+#=============================================================================
+# Target rules for targets named ppmsonhal.out
+
+# Build rule for target.
+ppmsonhal.out: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 ppmsonhal.out
+.PHONY : ppmsonhal.out
+
+# fast build rule for target.
+ppmsonhal.out/fast:
+	$(MAKE) -f CMakeFiles/ppmsonhal.out.dir/build.make CMakeFiles/ppmsonhal.out.dir/build
+.PHONY : ppmsonhal.out/fast
 
 src/haftasonu/ppm.o: src/haftasonu/ppm.cpp.o
 
@@ -196,6 +222,60 @@ src/haftasonu/ppm.cpp.s:
 	$(MAKE) -f CMakeFiles/ppmresim.out.dir/build.make CMakeFiles/ppmresim.out.dir/src/haftasonu/ppm.cpp.s
 .PHONY : src/haftasonu/ppm.cpp.s
 
+src/haftasonu/ppmgostergeli.o: src/haftasonu/ppmgostergeli.cpp.o
+
+.PHONY : src/haftasonu/ppmgostergeli.o
+
+# target to build an object file
+src/haftasonu/ppmgostergeli.cpp.o:
+	$(MAKE) -f CMakeFiles/ppmgostergeli.out.dir/build.make CMakeFiles/ppmgostergeli.out.dir/src/haftasonu/ppmgostergeli.cpp.o
+.PHONY : src/haftasonu/ppmgostergeli.cpp.o
+
+src/haftasonu/ppmgostergeli.i: src/haftasonu/ppmgostergeli.cpp.i
+
+.PHONY : src/haftasonu/ppmgostergeli.i
+
+# target to preprocess a source file
+src/haftasonu/ppmgostergeli.cpp.i:
+	$(MAKE) -f CMakeFiles/ppmgostergeli.out.dir/build.make CMakeFiles/ppmgostergeli.out.dir/src/haftasonu/ppmgostergeli.cpp.i
+.PHONY : src/haftasonu/ppmgostergeli.cpp.i
+
+src/haftasonu/ppmgostergeli.s: src/haftasonu/ppmgostergeli.cpp.s
+
+.PHONY : src/haftasonu/ppmgostergeli.s
+
+# target to generate assembly for a file
+src/haftasonu/ppmgostergeli.cpp.s:
+	$(MAKE) -f CMakeFiles/ppmgostergeli.out.dir/build.make CMakeFiles/ppmgostergeli.out.dir/src/haftasonu/ppmgostergeli.cpp.s
+.PHONY : src/haftasonu/ppmgostergeli.cpp.s
+
+src/haftasonu/ppmsonhal.o: src/haftasonu/ppmsonhal.cpp.o
+
+.PHONY : src/haftasonu/ppmsonhal.o
+
+# target to build an object file
+src/haftasonu/ppmsonhal.cpp.o:
+	$(MAKE) -f CMakeFiles/ppmsonhal.out.dir/build.make CMakeFiles/ppmsonhal.out.dir/src/haftasonu/ppmsonhal.cpp.o
+.PHONY : src/haftasonu/ppmsonhal.cpp.o
+
+src/haftasonu/ppmsonhal.i: src/haftasonu/ppmsonhal.cpp.i
+
+.PHONY : src/haftasonu/ppmsonhal.i
+
+# target to preprocess a source file
+src/haftasonu/ppmsonhal.cpp.i:
+	$(MAKE) -f CMakeFiles/ppmsonhal.out.dir/build.make CMakeFiles/ppmsonhal.out.dir/src/haftasonu/ppmsonhal.cpp.i
+.PHONY : src/haftasonu/ppmsonhal.cpp.i
+
+src/haftasonu/ppmsonhal.s: src/haftasonu/ppmsonhal.cpp.s
+
+.PHONY : src/haftasonu/ppmsonhal.s
+
+# target to generate assembly for a file
+src/haftasonu/ppmsonhal.cpp.s:
+	$(MAKE) -f CMakeFiles/ppmsonhal.out.dir/build.make CMakeFiles/ppmsonhal.out.dir/src/haftasonu/ppmsonhal.cpp.s
+.PHONY : src/haftasonu/ppmsonhal.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -204,14 +284,22 @@ help:
 	@echo "... depend"
 	@echo "... install/strip"
 	@echo "... install/local"
-	@echo "... edit_cache"
-	@echo "... ppmresim.out"
-	@echo "... rebuild_cache"
-	@echo "... list_install_components"
 	@echo "... install"
+	@echo "... list_install_components"
+	@echo "... ppmgostergeli.out"
+	@echo "... ppmresim.out"
+	@echo "... edit_cache"
+	@echo "... ppmsonhal.out"
+	@echo "... rebuild_cache"
 	@echo "... src/haftasonu/ppm.o"
 	@echo "... src/haftasonu/ppm.i"
 	@echo "... src/haftasonu/ppm.s"
+	@echo "... src/haftasonu/ppmgostergeli.o"
+	@echo "... src/haftasonu/ppmgostergeli.i"
+	@echo "... src/haftasonu/ppmgostergeli.s"
+	@echo "... src/haftasonu/ppmsonhal.o"
+	@echo "... src/haftasonu/ppmsonhal.i"
+	@echo "... src/haftasonu/ppmsonhal.s"
 .PHONY : help
 
 

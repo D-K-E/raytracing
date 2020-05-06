@@ -1,1 +1,3 @@
 /media/kaan/Data7510/GitProjects/raytracing/bin/haftasonu/ppmresim.out
+/media/kaan/Data7510/GitProjects/raytracing/bin/haftasonu/ppmgostergeli.out
+/media/kaan/Data7510/GitProjects/raytracing/bin/haftasonu/ppmsonhal.out

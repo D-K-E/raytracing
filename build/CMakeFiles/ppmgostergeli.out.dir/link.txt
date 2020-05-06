@@ -1,0 +1,1 @@
+/usr/bin/c++  -std=c++17  -rdynamic CMakeFiles/ppmgostergeli.out.dir/src/haftasonu/ppmgostergeli.cpp.o  -o ppmgostergeli.out -ldl 

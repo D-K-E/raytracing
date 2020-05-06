@@ -41,5 +41,11 @@ target_link_libraries(ppmgostergeli.out ${ALL_LIBS})
 
 install(TARGETS ppmgostergeli.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/haftasonu/")
 
+# -----------------------------------
+add_executable(ppmsonhal.out "src/haftasonu/ppmsonhal.cpp")
+target_link_libraries(ppmsonhal.out ${ALL_LIBS})
+
+install(TARGETS ppmsonhal.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/haftasonu/")
+
 # ---------- Sonraki -----------------
 # ---------- Nihai -------------------

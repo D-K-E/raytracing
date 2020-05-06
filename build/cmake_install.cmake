@@ -61,6 +61,54 @@ file(INSTALL DESTINATION "/media/kaan/Data7510/GitProjects/raytracing/bin/haftas
   endif()
 endif()
 
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  if(EXISTS "$ENV{DESTDIR}/media/kaan/Data7510/GitProjects/raytracing/bin/haftasonu/ppmgostergeli.out" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/media/kaan/Data7510/GitProjects/raytracing/bin/haftasonu/ppmgostergeli.out")
+    file(RPATH_CHECK
+         FILE "$ENV{DESTDIR}/media/kaan/Data7510/GitProjects/raytracing/bin/haftasonu/ppmgostergeli.out"
+         RPATH "")
+  endif()
+  list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
+   "/media/kaan/Data7510/GitProjects/raytracing/bin/haftasonu/ppmgostergeli.out")
+  if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
+    message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
+  endif()
+  if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
+    message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
+  endif()
+file(INSTALL DESTINATION "/media/kaan/Data7510/GitProjects/raytracing/bin/haftasonu" TYPE EXECUTABLE FILES "/media/kaan/Data7510/GitProjects/raytracing/build/ppmgostergeli.out")
+  if(EXISTS "$ENV{DESTDIR}/media/kaan/Data7510/GitProjects/raytracing/bin/haftasonu/ppmgostergeli.out" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/media/kaan/Data7510/GitProjects/raytracing/bin/haftasonu/ppmgostergeli.out")
+    if(CMAKE_INSTALL_DO_STRIP)
+      execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}/media/kaan/Data7510/GitProjects/raytracing/bin/haftasonu/ppmgostergeli.out")
+    endif()
+  endif()
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  if(EXISTS "$ENV{DESTDIR}/media/kaan/Data7510/GitProjects/raytracing/bin/haftasonu/ppmsonhal.out" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/media/kaan/Data7510/GitProjects/raytracing/bin/haftasonu/ppmsonhal.out")
+    file(RPATH_CHECK
+         FILE "$ENV{DESTDIR}/media/kaan/Data7510/GitProjects/raytracing/bin/haftasonu/ppmsonhal.out"
+         RPATH "")
+  endif()
+  list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
+   "/media/kaan/Data7510/GitProjects/raytracing/bin/haftasonu/ppmsonhal.out")
+  if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
+    message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
+  endif()
+  if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
+    message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
+  endif()
+file(INSTALL DESTINATION "/media/kaan/Data7510/GitProjects/raytracing/bin/haftasonu" TYPE EXECUTABLE FILES "/media/kaan/Data7510/GitProjects/raytracing/build/ppmsonhal.out")
+  if(EXISTS "$ENV{DESTDIR}/media/kaan/Data7510/GitProjects/raytracing/bin/haftasonu/ppmsonhal.out" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/media/kaan/Data7510/GitProjects/raytracing/bin/haftasonu/ppmsonhal.out")
+    if(CMAKE_INSTALL_DO_STRIP)
+      execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}/media/kaan/Data7510/GitProjects/raytracing/bin/haftasonu/ppmsonhal.out")
+    endif()
+  endif()
+endif()
+
 if(CMAKE_INSTALL_COMPONENT)
   set(CMAKE_INSTALL_MANIFEST "install_manifest_${CMAKE_INSTALL_COMPONENT}.txt")
 else()
