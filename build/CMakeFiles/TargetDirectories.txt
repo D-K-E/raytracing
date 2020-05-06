@@ -1,0 +1,7 @@
+/media/kaan/Data7510/GitProjects/raytracing/build/CMakeFiles/install/strip.dir
+/media/kaan/Data7510/GitProjects/raytracing/build/CMakeFiles/install/local.dir
+/media/kaan/Data7510/GitProjects/raytracing/build/CMakeFiles/edit_cache.dir
+/media/kaan/Data7510/GitProjects/raytracing/build/CMakeFiles/ppmresim.out.dir
+/media/kaan/Data7510/GitProjects/raytracing/build/CMakeFiles/rebuild_cache.dir
+/media/kaan/Data7510/GitProjects/raytracing/build/CMakeFiles/list_install_components.dir
+/media/kaan/Data7510/GitProjects/raytracing/build/CMakeFiles/install.dir
