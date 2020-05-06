@@ -35,5 +35,11 @@ add_executable(ppmresim.out "src/haftasonu/ppm.cpp")
 target_link_libraries(ppmresim.out ${ALL_LIBS})
 
 install(TARGETS ppmresim.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/haftasonu/")
+# ------------------------------------
+add_executable(ppmgostergeli.out "src/haftasonu/ppmgostergeli.cpp")
+target_link_libraries(ppmgostergeli.out ${ALL_LIBS})
+
+install(TARGETS ppmgostergeli.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/haftasonu/")
+
 # ---------- Sonraki -----------------
 # ---------- Nihai -------------------
