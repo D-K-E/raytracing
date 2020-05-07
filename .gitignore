@@ -46,7 +46,7 @@ _deps
 
 # ppm file
 
-bin/**
-build/**
-build/**
-build/**
+**/bin/**
+**/build/**
+**/build/**
+**/build/**
