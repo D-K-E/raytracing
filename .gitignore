@@ -46,7 +46,7 @@ _deps
 
 # ppm file
 
-bin/**/*.ppm
-build/**/*.make
-build/**/*.cmake
-build/**/*.txt
+bin/**
+build/**
+build/**
+build/**
