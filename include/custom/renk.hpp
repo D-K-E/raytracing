@@ -4,7 +4,7 @@
 #include <custom/vec3.hpp>
 #include <iostream>
 
-int renk_cast(float renk_degeri) {
+int renk_cast(double renk_degeri) {
   return static_cast<int>(255.999 * renk_degeri);
 }
 
