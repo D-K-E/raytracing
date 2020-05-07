@@ -46,6 +46,12 @@ add_executable(ppmsonhal.out "src/haftasonu/ppmsonhal.cpp")
 target_link_libraries(ppmsonhal.out ${ALL_LIBS})
 
 install(TARGETS ppmsonhal.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/haftasonu/")
+# ------------------------------------
+add_executable(isin.out "src/haftasonu/isin.cpp")
+target_link_libraries(isin.out ${ALL_LIBS})
+
+install(TARGETS isin.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/haftasonu/")
+
 
 # ---------- Sonraki -----------------
 # ---------- Nihai -------------------

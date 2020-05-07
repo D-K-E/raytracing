@@ -7,6 +7,7 @@
 
 using nokta3 = glm::vec3;
 using renk = glm::vec3;
+using vek3 = glm::vec3;
 
 void vektor_yaz(std::ostream &out, glm::vec3 v) {
   // renk degerlerini akisa yazar
