@@ -2,7 +2,7 @@
 //
 #include <custom/vec3.hpp>
 //
-#include <custom/renk.hpp>
+#include <custom/color.hpp>
 //
 #include <iostream>
 //
@@ -22,8 +22,8 @@ int main(void) {
       double r = double(j) / (resim_en - 1);
       double g = double(j) / (resim_boy - 1);
       double b = 0.26;
-      renk pixel_rengi(r, g, b);
-      renk_yaz(std::cout, pixel_rengi);
+      color pixel_rengi(r, g, b);
+      write_color(std::cout, pixel_rengi);
     }
   }
   std::cout << std::endl;

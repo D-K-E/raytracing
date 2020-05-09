@@ -51,6 +51,10 @@ add_executable(isin.out "src/haftasonu/isin.cpp")
 target_link_libraries(isin.out ${ALL_LIBS})
 
 install(TARGETS isin.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/haftasonu/")
+# ------------------------------------
+add_executable(cokyuzey.out "src/haftasonu/cokyuzey.cpp")
+target_link_libraries(cokyuzey.out ${ALL_LIBS})
+install(TARGETS cokyuzey.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/haftasonu/")
 
 
 # ---------- Sonraki -----------------

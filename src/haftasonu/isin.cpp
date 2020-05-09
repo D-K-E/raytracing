@@ -2,7 +2,7 @@
 //
 #include <custom/vec3.hpp>
 //
-#include <custom/renk.hpp>
+#include <custom/color.hpp>
 //
 #include <custom/ray.hpp>
 //
@@ -11,7 +11,7 @@
 #include <iostream>
 //
 
-bool vurdu_kure(const nokta3 merkez, double yariCapi, ray isin) {
+bool vurdu_kure(const point3 merkez, double yariCapi, Ray isin) {
   // isin kureye vurdu mu vurmadi mi ?
   // points on sphere ||Point - sphere_center|| - sphere_radius = 0
 
@@ -34,24 +34,24 @@ bool vurdu_kure(const nokta3 merkez, double yariCapi, ray isin) {
   // intersect hit on 2 points b^2 - c > 0
   // miss case hit on 0 point b^2 - c < 0
   // tangent hit on 1 point b^2 - c = 0
-  vek3 merkezeDogru = isin.basi() - merkez;
-  double a = glm::dot(isin.yonu(), isin.yonu());
-  double b = 2.0 * glm::dot(merkezeDogru, isin.yonu());
-  double c = glm::dot(merkezeDogru, merkezeDogru) - yariCapi * yariCapi;
+  vec3 merkezeDogru = isin.origin - merkez;
+  double a = dot(isin.direction, isin.direction);
+  double b = 2.0 * dot(merkezeDogru, isin.direction);
+  double c = dot(merkezeDogru, merkezeDogru) - yariCapi * yariCapi;
   double b2_minus_c = b * b - 4.0 * a * c;
   return (b2_minus_c >= 0.0);
 }
 
-renk isin_rengi(ray isin) {
+color isin_rengi(Ray isin) {
   //
-  nokta3 merkez(0.0, 0.0, -1.0);
+  point3 merkez(0.0, 0.0, -1.0);
   if (vurdu_kure(merkez, 0.5, isin)) {
-    renk r(1.0, 1.0, 0.0);
+    color r(1.0, 1.0, 0.0);
     return r;
   }
-  vek3 yonu = glm::normalize(isin.yon);
+  vec3 yonu = glm::normalize(isin.direction);
   double mesafe = 0.5 * (yonu.y + 1.0);
-  return (1.0 - mesafe) * renk(1.0) + mesafe * renk(0.5, 0.3, 1.0);
+  return (1.0 - mesafe) * color(1.0) + mesafe * color(0.5, 0.3, 1.0);
 }
 
 int main(void) {
@@ -61,11 +61,11 @@ int main(void) {
   std::cout << "P3" << std::endl;
   std::cout << resim_en << ' ' << resim_boy << std::endl;
   std::cout << "255" << std::endl;
-  vek3 baslangic(0.0, 0.0, 0.0);
-  vek3 yatay(4.0, 0.0, 0.0);
-  vek3 dikey(0.0, 2.25, 0.0);
-  nokta3 asagi_sol =
-      baslangic - yatay / 2.0 - dikey / 2.0 - vek3(0.0, 0.0, 1.0);
+  vec3 baslangic(0.0, 0.0, 0.0);
+  vec3 yatay(4.0, 0.0, 0.0);
+  vec3 dikey(0.0, 2.25, 0.0);
+  point3 asagi_sol =
+      baslangic - yatay / 2.0 - dikey / 2.0 - vec3(0.0, 0.0, 1.0);
 
   // tersten yaziyoruz
   for (int j = resim_boy - 1; j >= 0; --j) {
@@ -73,9 +73,9 @@ int main(void) {
     for (int i = 0; i < resim_en; ++i) {
       double u = double(i) / (resim_en - 1);
       double v = double(j) / (resim_boy - 1);
-      ray r(baslangic, asagi_sol + u * yatay + v * dikey);
-      renk isinin_rengi = isin_rengi(r);
-      renk_yaz(std::cout, isinin_rengi);
+      Ray r(baslangic, asagi_sol + u * yatay + v * dikey);
+      color isinin_rengi = isin_rengi(r);
+      write_color(std::cout, isinin_rengi);
     }
   }
   std::cout << std::endl;

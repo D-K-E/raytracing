@@ -12,23 +12,16 @@ Y: yonu
    */
 public:
   Ray() {}
-  Ray(const nokta3 basNokta, const vek3 yon);
-  nokta3 basi();
-  vek3 yonu();
-  nokta3 konum(double mesafe);
+  Ray(const point3 orig, const vec3 dir) {
+    // 1. Constructor
+    direction = dir;
+    origin = orig;
+  }
+  point3 at(double dist) const { return direction * dist + origin; }
 
 public:
-  nokta3 bnokta;
-  vek3 yon;
+  vec3 direction;
+  point3 origin;
 };
-Ray::Ray(const nokta3 basNokta, const vek3 yon) {
-  // 1. Constructor
-  this->yon = yon;
-  this->bnokta = basNokta;
-}
-
-nokta3 Ray::basi() { return this->bnokta; }
-nokta3 Ray::yonu() { return this->yon; }
-nokta3 Ray::konum(double mesafe) { return this->yon * mesafe + this->bnokta; }
 
 #endif

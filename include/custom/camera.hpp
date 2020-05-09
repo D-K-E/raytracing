@@ -5,21 +5,10 @@
 #ifndef CAMERA_HPP
 #define CAMERA_HPP
 
-#include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 enum Camera_Movement { FORWARD, BACKWARD, LEFT, RIGHT };
-
-struct Ray {
-  glm::vec3 origin;
-  glm::vec3 direction;
-};
-struct Segment {
-  glm::vec3 origin;
-  glm::vec3 direction;
-  float size;
-};
 
 // default values for the camera
 const float YAW = -90.0f;
@@ -278,5 +267,27 @@ void FpsCamera::processKeyboard(Camera_Movement direction, float deltaTime) {
   }
   this->pos.y = 0.0f;
 }
+
+class RayCamera {
+  // isin atan kamera/goz nesnesi
+private:
+  point3 origin;
+  vec3 horizontal;
+  vec3 vertical;
+  point3 lower_left_corner;
+
+public:
+  RayCamera() {
+    // constructor
+    lower_left_corner = vec3(-2, -1, -1);
+    origin = vec3(0, 0, 0);
+    vertical = vec3(0, 2, 0);
+    horizontal = vec3(4, 0, 0);
+  }
+  Ray get_ray(double u, double v) const {
+    // get camera ray
+    return Ray(origin, lower_left_corner + u * horizontal + v * vertical);
+  }
+};
 
 #endif
