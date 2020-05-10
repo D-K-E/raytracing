@@ -4,10 +4,12 @@
 //
 #include <custom/commons.hpp> // vek3, ray
 //
+class Material;
 
 struct HitRecord {
   point3 point;
   vec3 normal;
+  shared_ptr<Material> mat_ptr;
   double dist;
   bool front_face;
   inline void set_face_normal(const Ray &r, const vec3 &out_normal) {

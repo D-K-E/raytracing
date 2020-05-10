@@ -59,6 +59,10 @@ install(TARGETS cokyuzey.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/haftasonu/")
 add_executable(antialiasing.out "src/haftasonu/antialiasing.cpp")
 target_link_libraries(antialiasing.out ${ALL_LIBS})
 install(TARGETS antialiasing.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/haftasonu/")
+# ------------------------------------
+add_executable(diffuse.out "src/haftasonu/diffuse.cpp")
+target_link_libraries(diffuse.out ${ALL_LIBS})
+install(TARGETS diffuse.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/haftasonu/")
 
 # ---------- Sonraki -----------------
 # ---------- Nihai -------------------

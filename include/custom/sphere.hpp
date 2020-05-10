@@ -7,13 +7,20 @@
 //
 #include <custom/hittable.hpp>
 //
+#include <custom/material.hpp>
 
 class Sphere : public Hittable {
 public:
+  point3 center;
+  double radius;
+  shared_ptr<Material> mat_ptr;
+
+public:
   Sphere() {}
-  Sphere(point3 cent, double r) {
+  Sphere(point3 cent, double r, shared_ptr<Material> mat) {
     center = cent;
     radius = r;
+    mat_ptr = mat;
   }
   bool hit(const Ray &r, double dist_min, double dist_max,
            HitRecord &record) const {
@@ -32,6 +39,7 @@ public:
         record.point = r.at(record.dist);
         vec3 out_normal = (record.point - center) / radius;
         record.set_face_normal(r, out_normal);
+        record.mat_ptr = mat_ptr;
         return true;
       }
       margin = (-1 * half_b + root) / a;
@@ -40,13 +48,12 @@ public:
         record.point = r.at(record.dist);
         vec3 out_normal = (record.point - center) / radius;
         record.set_face_normal(r, out_normal);
+        record.mat_ptr = mat_ptr;
         return true;
       }
     }
     return false;
   }
-  point3 center;
-  double radius;
 };
 
 #endif
