@@ -71,5 +71,19 @@ vec3 reflect(const vec3 &v, const vec3 &n) {
   // yansitma
   return v - 2 * dot(v, n) * n;
 }
+vec3 refract(const vec3 &uv, const vec3 &n, double eta_over) {
+  // isigin bir seyin içinden geçerken kirilmasi
+  /*
+     eta * sin(theta) = eta' * sin(theta')
+     eta = 1.0 hava için
+     eta = 1.3 - 1.7 cam için
+     eta = 2.4 elmas için
+     sin(theta') = eta * sin(theta) / eta'
+   */
+  double costheta = dot(-1 * uv, n);
+  vec3 out_par = eta_over * (uv + costheta * n);
+  vec3 out_per = -1 * sqrt(1.0 - dot(out_par, out_par)) * n;
+  return out_par + out_per;
+}
 
 #endif

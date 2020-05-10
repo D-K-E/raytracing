@@ -56,16 +56,22 @@ int main(void) {
                                 make_shared<Lambertian>(color(0.8, 0.8, 0.0))));
 
   scene.add(make_shared<Sphere>(point3(1, 0, -1), 0.5,
-                                make_shared<Metal>(color(0.8, 0.6, 0.2))));
-  scene.add(make_shared<Sphere>(point3(-1, 0, -1), 0.5,
-                                make_shared<Metal>(color(0.8, 0.8, 0.8))));
-  scene.add(make_shared<Sphere>(point3(0.0, 0.0, -1.0), 0.5,
-                                make_shared<Lambertian>(color(0.7, 0.3, 0.3))));
+                                make_shared<Metal>(color(0.8, 0.6, 0.2), 0.3)));
+  // içi bos kure eksi yari çap normalleri içeri dogru yoneltiyor
+  // bu balonumsu bir goruntu yakalamak için ideal
 
+  scene.add(make_shared<Sphere>(point3(-1, 0, -1), 0.5,
+                                make_shared<Dielectric>(1.5)));
+  scene.add(make_shared<Sphere>(point3(-1, 0, -1), -0.45,
+                                make_shared<Dielectric>(1.5)));
   // deklarasyonu bitti
 
+  scene.add(make_shared<Sphere>(point3(0.0, 0.0, -1.0), 0.5,
+                                make_shared<Lambertian>(color(0.1, 0.2, 0.5))));
+
   // kamera
-  RayCamera camera;
+  vec3 vup(0, 1, 0);
+  RayCamera camera(point3(-2, 2, 1), point3(0, 0, -1), vup, 90, aspect_ratio);
 
   // resim yazim
   for (int j = imheight - 1; j >= 0; --j) {
