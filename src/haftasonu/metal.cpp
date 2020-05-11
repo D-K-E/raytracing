@@ -44,12 +44,6 @@ int main(void) {
   std::cout << imwidth << ' ' << imheight << std::endl;
   std::cout << "255" << std::endl;
 
-  // ppm formati için gerekli olanlar son
-  vec3 origin(0.0, 0.0, 0.0);
-  vec3 hor(4.0, 0.0, 0.0);
-  vec3 ver(0.0, 2.0, 0.0);
-  vec3 lower_left_corner = vec3(-2.0, -1.0, -1.0);
-
   // konacak objelerin deklarasyonu
   HittableList scene;
   scene.add(make_shared<Sphere>(point3(0.0, -100.5, -1.0), 100.0,
@@ -71,7 +65,7 @@ int main(void) {
 
   // kamera
   vec3 vup(0, 1, 0);
-  RayCamera camera(point3(-2, 2, 1), point3(0, 0, -1), vup, 90, aspect_ratio);
+  RayCamera camera(point3(-2, 2, 1), point3(0, 0, -1), vup, 45, aspect_ratio);
 
   // resim yazim
   for (int j = imheight - 1; j >= 0; --j) {

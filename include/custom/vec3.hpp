@@ -67,6 +67,16 @@ inline static vec3 random_in_hemisphere(const vec3 &normal) {
     return -1 * unit_sphere_dir;
   }
 }
+vec3 random_in_unit_disk() {
+  // lens yakinsamasi için gerekli
+  while (true) {
+    vec3 point = vec3(random_double(-1, 1), random_double(-1, 1), 0);
+    if (dot(point, point) >= 1) {
+      continue;
+    }
+    return point;
+  }
+}
 vec3 reflect(const vec3 &v, const vec3 &n) {
   // yansitma
   return v - 2 * dot(v, n) * n;

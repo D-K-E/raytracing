@@ -66,6 +66,11 @@ set ( ALL_LIBS
 add_executable(metal.out "src/haftasonu/metal.cpp")
 target_link_libraries(metal.out ${ALL_LIBS})
 install(TARGETS metal.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/haftasonu/")
+# ------------------------------------
+
+add_executable(bookcover.out "src/haftasonu/bookcover.cpp")
+target_link_libraries(bookcover.out ${ALL_LIBS})
+install(TARGETS bookcover.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/haftasonu/")
 
 # ---------- Sonraki -----------------
 # ---------- Nihai -------------------
