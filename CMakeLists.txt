@@ -2,9 +2,10 @@ cmake_minimum_required (VERSION 3.0.2)
 project("Isin Izleme - Raytracing")
 
 #find_package(OpenGL REQUIRED)
+find_package (Threads REQUIRED)
 
 set (CMAKE_CXX_FLAGS "-std=c++17")
-set (FLAGS "-ldl -ggdb -Wall -Wextra")
+set (FLAGS "-ldl -ggdb -Wall -Wextra -pthread")
 
 include_directories(
     # my headers
@@ -25,7 +26,8 @@ set ( ALL_LIBS
     #${OpenGL}
     #${GLFW_SHARED_LIB}
     #${ASSIMP_SHARED_LIB}
-    "-ldl"
+    ${Threads}
+    ${FLAGS}
     )
 
 # ---------- Ortak -------------------
@@ -73,4 +75,9 @@ target_link_libraries(bookcover.out ${ALL_LIBS})
 install(TARGETS bookcover.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/haftasonu/")
 
 # ---------- Sonraki -----------------
+
+add_executable(motionblur.out "src/sonraki/motionblur.cpp")
+target_link_libraries(motionblur.out ${ALL_LIBS})
+install(TARGETS motionblur.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
+
 # ---------- Nihai -------------------

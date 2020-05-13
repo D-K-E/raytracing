@@ -1,12 +1,12 @@
 //
 #include <cmath>
-#include <custom/color.hpp>
-#include <custom/commons.hpp>
+#include <custom/haftasonu/color.hpp>
+#include <custom/haftasonu/commons.hpp>
 //
-#include <custom/hittables.hpp>
+#include <custom/haftasonu/hittables.hpp>
 //
-#include <custom/camera.hpp>
-#include <custom/sphere.hpp>
+#include <custom/haftasonu/camera.hpp>
+#include <custom/haftasonu/sphere.hpp>
 //
 #include <iostream>
 //

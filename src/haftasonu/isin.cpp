@@ -2,9 +2,9 @@
 //
 #include <custom/vec3.hpp>
 //
-#include <custom/color.hpp>
+#include <custom/haftasonu/color.hpp>
 //
-#include <custom/ray.hpp>
+#include <custom/haftasonu/ray.hpp>
 //
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
