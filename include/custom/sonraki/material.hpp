@@ -5,25 +5,29 @@
 //
 #include <custom/sonraki/hittable.hpp>
 //
+#include <custom/sonraki/texture.hpp>
+//
 class Material {
 public:
   virtual bool scatter(const Ray &ray_in, const HitRecord &record,
                        color &attenuation, Ray &ray_out) const = 0;
+  virtual color emitted(double u, double v, const point3 &p) const {
+    return color(0, 0, 0);
+  }
 };
 
 class Lambertian : public Material {
-  /* Sonraki hafta */
 public:
-  color albedo; // normal renk genelde golgesi alinmistir
+  shared_ptr<Texture> albedo; // normal renk genelde golgesi alinmistir
 
 public:
-  Lambertian(const color &alb) : albedo(alb){};
+  Lambertian(shared_ptr<Texture> a) : albedo(a){};
   bool scatter(const Ray &ray_in, const HitRecord &record, color &attenuation,
                Ray &ray_out) const {
     // isik kirilsin mi kirilmasin mi
     vec3 out_dir = record.normal + random_unit_vector();
     ray_out = Ray(record.point, out_dir, ray_in.time());
-    attenuation = albedo;
+    attenuation = albedo->value(record.u, record.v, record.point);
     return true;
   }
 };
@@ -115,6 +119,22 @@ public:
     ref = refract(unit_in_dir, record.normal, eta_over);
     r_out = Ray(record.point, ref);
     return true;
+  }
+};
+
+class DiffuseLight : public Material {
+public:
+  shared_ptr<Texture> emit;
+  //
+public:
+  DiffuseLight(shared_ptr<Texture> t) : emit(t) {}
+  virtual bool scatter(const Ray &ray_in, const HitRecord &record,
+                       color &attenuation, Ray &ray_out) const {
+    return false;
+  }
+  virtual color emitted(double u, double v, const point3 &p) {
+    //
+    return emit->value(u, v, p);
   }
 };
 

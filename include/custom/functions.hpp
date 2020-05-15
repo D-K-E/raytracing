@@ -4,11 +4,24 @@
 #include <cstdlib>
 #include <custom/constants.hpp>
 #include <functional>
+#include <numeric>
 #include <random>
 
 inline double degree_to_radian(double degree) {
   //
   return degree * PI / 180;
+}
+inline int random_int() {
+  // from so: https://stackoverflow.com/a/21238187
+  static thread_local std::mt19937 generator;
+  std::uniform_int_distribution<int> distribution(0, 1);
+  return distribution(generator);
+}
+inline int random_int(const int &min, const int &max) {
+  // from so: https://stackoverflow.com/a/21238187
+  static thread_local std::mt19937 generator;
+  std::uniform_int_distribution<int> distribution(min, max);
+  return distribution(generator);
 }
 
 //

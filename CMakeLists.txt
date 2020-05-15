@@ -5,6 +5,7 @@ project("Isin Izleme - Raytracing")
 find_package (Threads REQUIRED)
 
 set (CMAKE_CXX_FLAGS "-std=c++17")
+set (CMAKE_BUILD_TYPE "Debug")
 set (FLAGS "-ldl -ggdb -Wall -Wextra -pthread")
 
 include_directories(
@@ -76,8 +77,28 @@ install(TARGETS bookcover.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/haftasonu/"
 
 # ---------- Sonraki -----------------
 
-add_executable(motionblur.out "src/sonraki/motionblur.cpp")
-target_link_libraries(motionblur.out ${ALL_LIBS})
-install(TARGETS motionblur.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
+#add_executable(motionblur.out "src/sonraki/motionblur.cpp")
+#target_link_libraries(motionblur.out ${ALL_LIBS})
+#install(TARGETS motionblur.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
+
+
+add_executable(texture.out "src/sonraki/texture.cpp")
+target_link_libraries(texture.out ${ALL_LIBS})
+install(TARGETS texture.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
+
+add_executable(twotexture.out "src/sonraki/twotexture.cpp")
+target_link_libraries(twotexture.out ${ALL_LIBS})
+install(TARGETS twotexture.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
+
+add_executable(twoperlin.out "src/sonraki/twoperlin.cpp")
+target_link_libraries(twoperlin.out ${ALL_LIBS})
+install(TARGETS twoperlin.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
+
+add_executable(imtexture.out "src/sonraki/imtexture.cpp")
+target_link_libraries(imtexture.out ${ALL_LIBS})
+install(TARGETS imtexture.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
+
+
+
 
 # ---------- Nihai -------------------

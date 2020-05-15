@@ -18,6 +18,7 @@ struct HitRecord {
     front_face = dot(r.direction, out_normal) < 0;
     normal = front_face ? out_normal : -1 * out_normal;
   }
+  double u, v;
 };
 
 class Hittable {

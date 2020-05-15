@@ -95,5 +95,13 @@ vec3 refract(const vec3 &uv, const vec3 &n, double eta_over) {
   vec3 out_per = -1 * sqrt(1.0 - dot(out_par, out_par)) * n;
   return out_par + out_per;
 }
+void to_spheric(const vec3 &v, double &phi, double &theta) {
+  // convert components of vec3 to spheric coordinates
+  vec3 v2 = to_unit(v);
+  phi = atan2(v2.x, v2.z);
+  theta = asin(v2.y);
+  // phi = atan2(v.z, v.x);
+  // theta = asin(v.y);
+}
 
 #endif

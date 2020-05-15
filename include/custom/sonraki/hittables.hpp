@@ -33,6 +33,22 @@ public:
     }
     return hit_;
   }
+  virtual bool bounding_box(double t1, double t2, Aabb &output_box) const {
+    //
+    if (objects.empty()) {
+      return false;
+    }
+    bool fbox = true;
+    Aabb temp_box;
+    for (const shared_ptr<Hittable> object : objects) {
+      if (object->bounding_box(t1, t2, temp_box) == false) {
+        return false;
+      }
+      output_box = fbox ? temp_box : surrounding_box(output_box, temp_box);
+      fbox = false;
+    }
+    return true;
+  }
 };
 
 #endif

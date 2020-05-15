@@ -10,9 +10,14 @@
 //
 #include <custom/sonraki/sphere.hpp>
 //
+#include <filesystem>
 #include <iostream>
 #include <thread>
 //
+namespace fs = std::filesystem;
+fs::path cdir = fs::current_path();
+fs::path tpath = cdir / "texture";
+
 color ray_color(const Ray &r, const HittableList &scene, int depth) {
   // carpan isini renklendirir
   HitRecord record;
@@ -25,7 +30,8 @@ color ray_color(const Ray &r, const HittableList &scene, int depth) {
     Ray r_out;
     color atten;
     if (record.mat_ptr->scatter(r, record, atten, r_out)) {
-      return atten * ray_color(r_out, scene, depth - 1);
+      // return atten * ray_color(r_out, scene, depth - 1);
+      return atten;
     }
     return color(1.0);
   }
@@ -35,49 +41,18 @@ color ray_color(const Ray &r, const HittableList &scene, int depth) {
 }
 
 HittableList random_scene() {
-  // random scene
+  //
   HittableList scene;
-  scene.add(make_shared<Sphere>(point3(0, -1000, 0), 1000,
-                                make_shared<Lambertian>(color(0.5, 0.5, 0.5))));
-
-  int i = 1;
-  for (int a = -11; a < 11; a++) {
-    for (int b = -11; b < 11; b++) {
-      double choose_mat = random_double();
-      point3 center(a + 0.9 * random_double(), 0.2, b + 0.9 * random_double());
-      if ((center - vec3(4, 0.2, 0)).length() > 0.9) {
-        if (choose_mat < 0.8) {
-          // diffuse
-          vec3 albedo = random_vec() * random_vec();
-          scene.add(make_shared<MovingSphere>(
-              center,                                     // center1
-              center + vec3(0, random_double(0, 0.5), 0), // center2
-              0.0, 1.0, 0.2,                  // time1, time2, radius
-              make_shared<Lambertian>(albedo) // albedo
-              ));
-        } else if (choose_mat < 0.95) {
-          // metal
-          vec3 albedo = random_vec(0.5, 1);
-          double fuzz = random_double(0, 0.5);
-          scene.add(make_shared<Sphere>(center, 0.2,
-                                        make_shared<Metal>(albedo, fuzz)));
-        } else {
-          // glass
-          scene.add(
-              make_shared<Sphere>(center, 0.2, make_shared<Dielectric>(1.5)));
-        }
-      }
-    }
-  }
-
-  scene.add(
-      make_shared<Sphere>(point3(0, 1, 0), 1.0, make_shared<Dielectric>(1.5)));
-
-  scene.add(make_shared<Sphere>(point3(-4, 1, 0), 1.0,
-                                make_shared<Lambertian>(color(.4, .2, .1))));
-
-  scene.add(make_shared<Sphere>(point3(4, 1, 0), 1.0,
-                                make_shared<Metal>(color(.7, .6, .5), 0.0)));
+  fs::path texturePath = tpath / "earth.jpg";
+  //
+  shared_ptr<ImageTexture> imtxt =
+      make_shared<ImageTexture>(texturePath.c_str());
+  // std::cerr << "texture path: " << texturePath.c_str() << std::endl;
+  shared_ptr<Metal> mtl = make_shared<Metal>(color(0.7, 0.6, 0.5), 0.2);
+  //
+  shared_ptr<Lambertian> lbm = make_shared<Lambertian>(imtxt);
+  scene.add(make_shared<Sphere>(point3(0, 0, 0), 2, lbm));
+  //scene.add(make_shared<Sphere>(point3(0, 10, 0), 10, mtl));
   return scene;
 }
 
@@ -133,7 +108,7 @@ int main(void) {
   vec3 vup(0, 1, 0);
   double dist_to_focus = 10.0;
   double aperature = 0.1;
-  TimeRayCamera camera(point3(13, 2, 3), point3(0, 0, 0), vup, 45, aspect_ratio,
+  TimeRayCamera camera(point3(13, 2, 3), point3(0, 0, 0), vup, 30, aspect_ratio,
                        aperature, dist_to_focus, 0.0, 1.0);
 
   // resim yazim
