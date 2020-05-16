@@ -9,16 +9,6 @@
 //
 #include <custom/sonraki/material.hpp>
 //
-void get_sphere_uv(const vec3 &p, double &u, double &v) {
-  // https://en.wikipedia.org/wiki/UV_mapping
-  // http://www.cse.msu.edu/~cse872/tutorial4.html
-  double phi, theta;
-  to_spheric(p, phi, theta);
-  // u = 1 - (phi + PI) / 2 * PI; // why ?
-  // v = (theta + PI / 2) / PI;   // why ?
-  u = 0.5 + (phi / 2 * PI);
-  v = 0.5 + (theta / PI);
-}
 class Sphere : public Hittable {
 public:
   point3 center;
@@ -46,7 +36,16 @@ public:
         record.point = r.at(record.dist);
         vec3 out_normal = (record.point - center) / radius;
         record.set_face_normal(r, out_normal);
-        get_sphere_uv((record.point - center), record.u, record.v);
+        if (record.front_face) {
+          // ray is outside of the sphere
+          // the normal points from center to outside
+          get_sphere_uv(record.normal, record.u, record.v);
+        } else {
+          // ray is inside of the sphere
+          // the normal points from inside to center
+          get_sphere_uv(-record.normal, record.u, record.v);
+        }
+        // get_sphere_uv((record.point - center) / radius, record.u, record.v);
         record.mat_ptr = mat_ptr;
         return true;
       }
@@ -56,7 +55,16 @@ public:
         record.point = r.at(record.dist);
         vec3 out_normal = (record.point - center) / radius;
         record.set_face_normal(r, out_normal);
-        get_sphere_uv((record.point - center), record.u, record.v);
+        if (record.front_face) {
+          // ray is outside of the sphere
+          // the normal points from center to outside
+          get_sphere_uv(record.normal, record.u, record.v);
+        } else {
+          // ray is inside of the sphere
+          // the normal points from inside to center
+          get_sphere_uv(-record.normal, record.u, record.v);
+        }
+        // get_sphere_uv((record.point - center) / radius, record.u, record.v);
         record.mat_ptr = mat_ptr;
         return true;
       }
@@ -104,7 +112,6 @@ public:
         record.dist = margin;
         record.point = r.at(record.dist);
         vec3 out_normal = (record.point - center(r.time())) / radius;
-        get_sphere_uv(out_normal, record.u, record.v);
         record.set_face_normal(r, out_normal);
         record.mat_ptr = mat_ptr;
         return true;
@@ -114,7 +121,6 @@ public:
         record.dist = margin;
         record.point = r.at(record.dist);
         vec3 out_normal = (record.point - center(r.time())) / radius;
-        get_sphere_uv(out_normal, record.u, record.v);
         record.set_face_normal(r, out_normal);
         record.mat_ptr = mat_ptr;
         return true;

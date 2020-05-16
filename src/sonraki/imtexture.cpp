@@ -30,8 +30,8 @@ color ray_color(const Ray &r, const HittableList &scene, int depth) {
     Ray r_out;
     color atten;
     if (record.mat_ptr->scatter(r, record, atten, r_out)) {
-      // return atten * ray_color(r_out, scene, depth - 1);
-      return atten;
+      return atten * ray_color(r_out, scene, depth - 1);
+      // return atten;
     }
     return color(1.0);
   }
@@ -43,7 +43,7 @@ color ray_color(const Ray &r, const HittableList &scene, int depth) {
 HittableList random_scene() {
   //
   HittableList scene;
-  fs::path texturePath = tpath / "earth.jpg";
+  fs::path texturePath = tpath / "someImg.jpg";
   //
   shared_ptr<ImageTexture> imtxt =
       make_shared<ImageTexture>(texturePath.c_str());
@@ -52,7 +52,7 @@ HittableList random_scene() {
   //
   shared_ptr<Lambertian> lbm = make_shared<Lambertian>(imtxt);
   scene.add(make_shared<Sphere>(point3(0, 0, 0), 2, lbm));
-  //scene.add(make_shared<Sphere>(point3(0, 10, 0), 10, mtl));
+  scene.add(make_shared<Sphere>(point3(0, 10, 0), 10, mtl));
   return scene;
 }
 
@@ -107,8 +107,8 @@ int main(void) {
   // kamera
   vec3 vup(0, 1, 0);
   double dist_to_focus = 10.0;
-  double aperature = 0.1;
-  TimeRayCamera camera(point3(13, 2, 3), point3(0, 0, 0), vup, 30, aspect_ratio,
+  double aperature = 0.0;
+  TimeRayCamera camera(point3(13, 2, 3), point3(0, 0, 0), vup, 20, aspect_ratio,
                        aperature, dist_to_focus, 0.0, 1.0);
 
   // resim yazim

@@ -9,16 +9,22 @@
 //
 class Material {
 public:
+  const char *mtype = "Material";
   virtual bool scatter(const Ray &ray_in, const HitRecord &record,
                        color &attenuation, Ray &ray_out) const = 0;
   virtual color emitted(double u, double v, const point3 &p) const {
-    return color(0, 0, 0);
+    return color(0);
   }
 };
+
+inline std::ostream &operator<<(std::ostream &out, const Material &m) {
+  return out << " material: " << m.mtype;
+}
 
 class Lambertian : public Material {
 public:
   shared_ptr<Texture> albedo; // normal renk genelde golgesi alinmistir
+  const char *mtype = "Lambertian";
 
 public:
   Lambertian(shared_ptr<Texture> a) : albedo(a){};
@@ -35,6 +41,7 @@ class Metal : public Material {
 public:
   color albedo;     // normal renk genelde golgesi alinmistir
   double roughness; // yuzey ne kadar puruzlu
+  const char *mtype = "Metal";
 
 public:
   Metal(const color &alb, double rough) {
@@ -55,6 +62,7 @@ public:
 class Dielectric : public Material {
 public:
   double ref_idx;
+  const char *mtype = "Dielectric";
 
 public:
   Dielectric(double ridx) { ref_idx = ridx; }
@@ -125,16 +133,20 @@ public:
 class DiffuseLight : public Material {
 public:
   shared_ptr<Texture> emit;
+  const char *mtype = "DiffuseLight";
   //
 public:
   DiffuseLight(shared_ptr<Texture> t) : emit(t) {}
   virtual bool scatter(const Ray &ray_in, const HitRecord &record,
                        color &attenuation, Ray &ray_out) const {
+    //
+    // std::cerr << "scatter color: " << std::endl;
     return false;
   }
-  virtual color emitted(double u, double v, const point3 &p) {
+  virtual color emitted(double u, double v, const point3 &p) const {
     //
-    return emit->value(u, v, p);
+    color emitColor = emit->value(u, v, p);
+    return emitColor;
   }
 };
 
