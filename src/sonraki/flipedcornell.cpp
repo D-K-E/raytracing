@@ -57,12 +57,15 @@ HittableList cornell_box() {
       make_shared<DiffuseLight>(make_shared<SolidColor>(15.0, 15.0, 15.0));
 
   // --------- objects -------------------
-  scene.add(make_shared<YZRect>(0, 555, 0, 555, 555, green));
+  scene.add(
+      make_shared<FlipFace>(make_shared<YZRect>(0, 555, 0, 555, 555, green)));
   scene.add(make_shared<YZRect>(0, 555, 0, 555, 0, red));
   scene.add(make_shared<XZRect>(213, 343, 227, 332, 554, light));
-  scene.add(make_shared<XZRect>(0, 555, 0, 555, 0, white));
+  scene.add(
+      make_shared<FlipFace>(make_shared<XZRect>(0, 555, 0, 555, 0, white)));
   scene.add(make_shared<XZRect>(0, 555, 0, 555, 555, white));
-  scene.add(make_shared<XYRect>(0, 555, 0, 555, 555, white));
+  scene.add(
+      make_shared<FlipFace>(make_shared<XYRect>(0, 555, 0, 555, 555, white)));
 
   return scene;
 }

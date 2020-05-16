@@ -37,4 +37,23 @@ public:
   virtual bool bounding_box(double t0, double t1, Aabb &output_bbox) const = 0;
 };
 
+class FlipFace : public Hittable {
+public:
+  shared_ptr<Hittable> ptr;
+
+public:
+  FlipFace(shared_ptr<Hittable> p) : ptr(p){};
+  virtual bool hit(const Ray &r_in, double t_min, double t_max,
+                   HitRecord &rec) const {
+    if (ptr->hit(r_in, t_min, t_max, rec) == false)
+      return false;
+
+    rec.front_face = not rec.front_face;
+    return true;
+  }
+  virtual bool bounding_box(double t0, double t1, Aabb &output_box) const {
+    return ptr->bounding_box(t0, t1, output_box);
+  }
+};
+
 #endif

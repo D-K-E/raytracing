@@ -9,6 +9,7 @@
 #include <custom/sonraki/camera.hpp>
 //
 #include <custom/sonraki/aarect.hpp>
+#include <custom/sonraki/box.hpp>
 #include <custom/sonraki/sphere.hpp>
 //
 #include <filesystem>
@@ -57,12 +58,18 @@ HittableList cornell_box() {
       make_shared<DiffuseLight>(make_shared<SolidColor>(15.0, 15.0, 15.0));
 
   // --------- objects -------------------
-  scene.add(make_shared<YZRect>(0, 555, 0, 555, 555, green));
+  scene.add(
+      make_shared<FlipFace>(make_shared<YZRect>(0, 555, 0, 555, 555, green)));
   scene.add(make_shared<YZRect>(0, 555, 0, 555, 0, red));
   scene.add(make_shared<XZRect>(213, 343, 227, 332, 554, light));
-  scene.add(make_shared<XZRect>(0, 555, 0, 555, 0, white));
+  scene.add(
+      make_shared<FlipFace>(make_shared<XZRect>(0, 555, 0, 555, 0, white)));
   scene.add(make_shared<XZRect>(0, 555, 0, 555, 555, white));
-  scene.add(make_shared<XYRect>(0, 555, 0, 555, 555, white));
+  scene.add(
+      make_shared<FlipFace>(make_shared<XYRect>(0, 555, 0, 555, 555, white)));
+  scene.add(make_shared<Box>(point3(130, 0, 65), point3(295, 165, 230), white));
+  scene.add(
+      make_shared<Box>(point3(265, 0, 295), point3(430, 330, 460), white));
 
   return scene;
 }

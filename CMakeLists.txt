@@ -98,13 +98,23 @@ install(TARGETS bookcover.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/haftasonu/"
 #target_link_libraries(imtexture.out ${ALL_LIBS})
 #install(TARGETS imtexture.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
 
-add_executable(imlighttexture.out "src/sonraki/imlighttexture.cpp")
-target_link_libraries(imlighttexture.out ${ALL_LIBS})
-install(TARGETS imlighttexture.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
+#add_executable(imlighttexture.out "src/sonraki/imlighttexture.cpp")
+#target_link_libraries(imlighttexture.out ${ALL_LIBS})
+#install(TARGETS imlighttexture.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
 
-add_executable(cornell.out "src/sonraki/cornell.cpp")
-target_link_libraries(cornell.out ${ALL_LIBS})
-install(TARGETS cornell.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
+#add_executable(cornell.out "src/sonraki/cornell.cpp")
+#target_link_libraries(cornell.out ${ALL_LIBS})
+#install(TARGETS cornell.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
+
+#add_executable(fcornell.out "src/sonraki/flipedcornell.cpp")
+#target_link_libraries(fcornell.out ${ALL_LIBS})
+#install(TARGETS fcornell.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
+
+add_executable(cornellbox.out "src/sonraki/cornellbox.cpp")
+target_link_libraries(cornellbox.out ${ALL_LIBS})
+install(TARGETS cornellbox.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
+
+
 
 
 # ---------- Nihai -------------------
