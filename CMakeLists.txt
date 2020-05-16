@@ -82,23 +82,29 @@ install(TARGETS bookcover.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/haftasonu/"
 #install(TARGETS motionblur.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
 
 
-add_executable(texture.out "src/sonraki/texture.cpp")
-target_link_libraries(texture.out ${ALL_LIBS})
-install(TARGETS texture.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
+#add_executable(texture.out "src/sonraki/texture.cpp")
+#target_link_libraries(texture.out ${ALL_LIBS})
+#install(TARGETS texture.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
 
-add_executable(twotexture.out "src/sonraki/twotexture.cpp")
-target_link_libraries(twotexture.out ${ALL_LIBS})
-install(TARGETS twotexture.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
+#add_executable(twotexture.out "src/sonraki/twotexture.cpp")
+#target_link_libraries(twotexture.out ${ALL_LIBS})
+#install(TARGETS twotexture.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
 
-add_executable(twoperlin.out "src/sonraki/twoperlin.cpp")
-target_link_libraries(twoperlin.out ${ALL_LIBS})
-install(TARGETS twoperlin.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
+#add_executable(twoperlin.out "src/sonraki/twoperlin.cpp")
+#target_link_libraries(twoperlin.out ${ALL_LIBS})
+#install(TARGETS twoperlin.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
 
-add_executable(imtexture.out "src/sonraki/imtexture.cpp")
-target_link_libraries(imtexture.out ${ALL_LIBS})
-install(TARGETS imtexture.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
+#add_executable(imtexture.out "src/sonraki/imtexture.cpp")
+#target_link_libraries(imtexture.out ${ALL_LIBS})
+#install(TARGETS imtexture.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
 
+add_executable(imlighttexture.out "src/sonraki/imlighttexture.cpp")
+target_link_libraries(imlighttexture.out ${ALL_LIBS})
+install(TARGETS imlighttexture.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
 
+add_executable(cornell.out "src/sonraki/cornell.cpp")
+target_link_libraries(cornell.out ${ALL_LIBS})
+install(TARGETS cornell.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
 
 
 # ---------- Nihai -------------------

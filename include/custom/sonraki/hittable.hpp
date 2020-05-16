@@ -20,6 +20,15 @@ struct HitRecord {
   }
   double u, v;
 };
+/* --------------------- HitRecord utils -----------------*/
+inline std::ostream &operator<<(std::ostream &out, const HitRecord &h) {
+  // yazim
+  return out << "point: " << h.point << " normal: " << h.normal
+             << " dist: " << h.dist << " front: " << h.front_face
+             << " u: " << h.u << " v: " << h.v << " matptr: " << h.mat_ptr;
+}
+
+/* --------------------- HitRecord utils end -----------------*/
 
 class Hittable {
 public:
