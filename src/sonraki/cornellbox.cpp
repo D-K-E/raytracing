@@ -9,6 +9,7 @@
 #include <custom/sonraki/camera.hpp>
 //
 #include <custom/sonraki/aarect.hpp>
+#include <custom/sonraki/box.hpp>
 #include <custom/sonraki/sphere.hpp>
 //
 #include <filesystem>
@@ -34,7 +35,7 @@ color ray_color(const Ray &r, const color &background,
   Ray r_out;
   color atten;
   color emittedColor =
-      record.mat_ptr->emitted(record.u, record.v, record.point);
+    record.mat_ptr->emitted(record.u, record.v, record.point);
   if (!record.mat_ptr->scatter(r, record, atten, r_out)) {
     return emittedColor;
   }
@@ -50,11 +51,11 @@ HittableList cornell_box() {
   // ---------- materials -----------------
   auto red = make_shared<Lambertian>(make_shared<SolidColor>(0.65, 0.05, 0.05));
   auto white =
-      make_shared<Lambertian>(make_shared<SolidColor>(0.88, 0.88, 0.88));
+    make_shared<Lambertian>(make_shared<SolidColor>(0.88, 0.88, 0.88));
   auto green =
-      make_shared<Lambertian>(make_shared<SolidColor>(0.18, 0.78, 0.18));
+    make_shared<Lambertian>(make_shared<SolidColor>(0.18, 0.78, 0.18));
   auto light =
-      make_shared<DiffuseLight>(make_shared<SolidColor>(15.0, 15.0, 15.0));
+    make_shared<DiffuseLight>(make_shared<SolidColor>(15.0, 15.0, 15.0));
 
   // --------- objects -------------------
   scene.add(make_shared<YZRect>(0, 555, 0, 555, 555, green));
@@ -63,6 +64,9 @@ HittableList cornell_box() {
   scene.add(make_shared<XZRect>(0, 555, 0, 555, 0, white));
   scene.add(make_shared<XZRect>(0, 555, 0, 555, 555, white));
   scene.add(make_shared<XYRect>(0, 555, 0, 555, 555, white));
+  scene.add(make_shared<Box>(point3(130, 0, 65), point3(295, 165, 230), white));
+  scene.add(
+            make_shared<Box>(point3(265, 0, 295), point3(430, 330, 460), white));
 
   return scene;
 }

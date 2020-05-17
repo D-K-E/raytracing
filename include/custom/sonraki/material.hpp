@@ -150,4 +150,27 @@ public:
   }
 };
 
+class Isotropic : public Material {
+public:
+  shared_ptr<Texture> albedo;
+
+public:
+  Isotropic(shared_ptr<Texture> a) : albedo(a) {}
+  virtual bool scatter(const Ray &r_in, const HitRecord &rec,
+                       color &attenuation, Ray &scattered) const {
+    /*
+    As the ray passes through the volume, it may scatter at any point. The
+    denser the volume, the more likely that is. The probability that the ray
+    scatters in any small distance ΔL is:
+
+    probability=C⋅ΔL
+
+    where C is proportional to the optical density of the volume.
+     */
+    scattered = Ray(rec.point, random_in_unit_sphere(), r_in.time());
+    attenuation = albedo->value(rec.u, rec.v, rec.point);
+    return true;
+  }
+};
+
 #endif

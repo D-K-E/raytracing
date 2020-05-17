@@ -8,41 +8,65 @@
 //
 #include <custom/sonraki/camera.hpp>
 //
+#include <custom/sonraki/aarect.hpp>
 #include <custom/sonraki/sphere.hpp>
 //
-#include <chrono>
+#include <filesystem>
 #include <iostream>
 #include <thread>
 //
-color ray_color(const Ray &r, const HittableList &scene, int depth) {
+namespace fs = std::filesystem;
+fs::path cdir = fs::current_path();
+fs::path tpath = cdir / "texture";
+
+color ray_color(const Ray &r, const color &background,
+                const HittableList &scene, int depth) {
   // carpan isini renklendirir
   HitRecord record;
   if (depth <= 0) {
     // final case
     return color(0);
   }
-  if (scene.hit(r, 0.001, INF, record)) {
-    // recursive case
-    Ray r_out;
-    color atten;
-    if (record.mat_ptr->scatter(r, record, atten, r_out)) {
-      return atten * ray_color(r_out, scene, depth - 1);
-    }
-    return color(1.0);
+  if (!scene.hit(r, 0.001, INF, record)) {
+    return background;
   }
-  vec3 direction = to_unit(r.direction);
-  double temp = 0.5 * (direction.y + 1.0);
-  return (1.0 - temp) * color(1.0) + temp * color(0.5, 0.7, 1.0);
+  // recursive case
+  Ray r_out;
+  color atten;
+  color emittedColor =
+      record.mat_ptr->emitted(record.u, record.v, record.point);
+  if (!record.mat_ptr->scatter(r, record, atten, r_out)) {
+    return emittedColor;
+  }
+  // bidirectional surface scattering distribution function
+  // rendering equation = L^e + L^r
+  return emittedColor + atten * ray_color(r_out, background, scene, depth - 1);
 }
 
-HittableList random_scene() {
+HittableList cornell_box() {
   //
   HittableList scene;
-  shared_ptr<NoiseTexture> pertext = make_shared<NoiseTexture>();
-  scene.add(make_shared<Sphere>(point3(0, -1000, 0), 1000,
-                                make_shared<Lambertian>(pertext)));
-  scene.add(make_shared<Sphere>(point3(0, 2, 0), 2,
-                                make_shared<Lambertian>(pertext)));
+
+  // ---------- materials -----------------
+  auto red = make_shared<Lambertian>(make_shared<SolidColor>(0.65, 0.05, 0.05));
+  auto white =
+      make_shared<Lambertian>(make_shared<SolidColor>(0.88, 0.88, 0.88));
+  auto green =
+      make_shared<Lambertian>(make_shared<SolidColor>(0.18, 0.78, 0.18));
+  auto light =
+      make_shared<DiffuseLight>(make_shared<SolidColor>(15.0, 15.0, 15.0));
+
+  // --------- objects -------------------
+  scene.add(
+      make_shared<FlipFace>(make_shared<YZRect>(0, 555, 0, 555, 555, green)));
+  scene.add(make_shared<YZRect>(0, 555, 0, 555, 0, red));
+  scene.add(make_shared<XZRect>(213, 343, 227, 332, 554, light));
+  scene.add(
+      make_shared<FlipFace>(make_shared<XZRect>(0, 555, 0, 555, 0, white)));
+  scene.add(make_shared<XZRect>(0, 555, 0, 555, 555, white));
+  scene.add(
+      make_shared<FlipFace>(make_shared<XYRect>(0, 555, 0, 555, 555, white)));
+
   return scene;
 }
 
@@ -67,19 +91,19 @@ void innerLoop(InnerParams params) {
   int i = params.imi;
   int j = params.imj;
   HittableList scene = params.scene;
+  color background(0);
   //
   color rcolor(0.0, 0.0, 0.0);
   for (int k = 0; k < psample; k++) {
     double t = double(i + random_double()) / (imwidth - 1);
     double s = double(j + random_double()) / (imheight - 1);
     Ray r = camera.get_ray(t, s);
-    rcolor += ray_color(r, scene, mdepth);
+    rcolor += ray_color(r, background, scene, mdepth);
   }
   write_color(std::cout, rcolor, psample);
 }
 
 int main(void) {
-  auto start = std::chrono::high_resolution_clock::now();
   // resmin yazma fonksiyonu
   double aspect_ratio = 16.0 / 9.0;
   const int imwidth = 640;
@@ -93,14 +117,14 @@ int main(void) {
   std::cout << "255" << std::endl;
 
   // konacak objelerin deklarasyonu
-  HittableList scene = random_scene();
+  HittableList scene = cornell_box();
 
   // kamera
   vec3 vup(0, 1, 0);
   double dist_to_focus = 10.0;
-  double aperature = 0.0;
-  TimeRayCamera camera(point3(13, 2, 3), point3(0, 0, 0), vup, 45, aspect_ratio,
-                       aperature, dist_to_focus, 0.0, 1.0);
+  double aperature = 0.1;
+  TimeRayCamera camera(point3(278, 278, -800), point3(278, 278, 0), vup, 40,
+                       aspect_ratio, aperature, dist_to_focus, 0.0, 1.0);
 
   // resim yazim
   for (int j = imheight - 1; j >= 0; j -= 1) {
@@ -112,10 +136,4 @@ int main(void) {
       //
     }
   }
-  auto stop = std::chrono::high_resolution_clock::now();
-  auto duration =
-      std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-
-  std::cerr << "duration" << std::endl;
-  std::cerr << duration.count() << std::endl;
 }

@@ -18,7 +18,7 @@ public:
   BvhNode(std::vector<shared_ptr<Hittable>> &objects, size_t start, size_t end,
           double time1, double time2);
   BvhNode(HittableList &hlist, double time1, double time2)
-      : BvhNode(hlist.objects, 0, hlist.size(), time1, time2);
+      : BvhNode(hlist.objects, 0, hlist.objects.size(), time1, time2) {}
   bool hit(const Ray &r_in, double tmin, double tmax, HitRecord &record) const {
     // objeleri vurdu mu
     if (box.hit(r_in, tmin, tmax) == false) {
@@ -63,8 +63,8 @@ BvhNode::BvhNode(std::vector<shared_ptr<Hittable>> &objects, size_t start,
                  size_t end, double time1, double time2) {
   //
   int ax = random_int(0, 2);
-  typedef bool comparator(const shared_ptr<Hittable>,
-                          const shared_ptr<Hittable>);
+  std::function<bool(const shared_ptr<Hittable>, const shared_ptr<Hittable>)>
+      comparator;
   if (ax == 0) {
     comparator = box_compare_x;
   } else if (ax == 1) {

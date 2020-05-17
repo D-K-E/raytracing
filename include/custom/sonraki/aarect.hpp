@@ -119,7 +119,7 @@ public:
   YZRect() {}
   YZRect(double _y0, double _y1, double _z0, double _z1, double _k,
          shared_ptr<Material> mat)
-      : AaRect(_y0, _y1, _z0, _z1, _k, mat, vec3(0, 1, 0)), y0(_y0), y1(_y1),
+      : AaRect(_y0, _y1, _z0, _z1, _k, mat, vec3(1, 0, 0)), y0(_y0), y1(_y1),
         z0(_z0), z1(_z1) {}
 };
 
