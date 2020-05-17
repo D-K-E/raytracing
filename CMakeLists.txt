@@ -93,18 +93,54 @@ install(TARGETS bookcover.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/haftasonu/"
 #add_executable(twoperlin.out "src/sonraki/twoperlin.cpp")
 #target_link_libraries(twoperlin.out ${ALL_LIBS})
 #install(TARGETS twoperlin.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
+#add_executable(twoperlinmulti.out "src/sonraki/twoperlinmulti.cpp")
+#target_link_libraries(twoperlinmulti.out ${ALL_LIBS})
+#install(TARGETS twoperlinmulti.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
+
+
 
 #add_executable(imtexture.out "src/sonraki/imtexture.cpp")
 #target_link_libraries(imtexture.out ${ALL_LIBS})
 #install(TARGETS imtexture.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
 
-add_executable(imlighttexture.out "src/sonraki/imlighttexture.cpp")
-target_link_libraries(imlighttexture.out ${ALL_LIBS})
-install(TARGETS imlighttexture.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
+#add_executable(imlighttexture.out "src/sonraki/imlighttexture.cpp")
+#target_link_libraries(imlighttexture.out ${ALL_LIBS})
+#install(TARGETS imlighttexture.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
 
-add_executable(cornell.out "src/sonraki/cornell.cpp")
-target_link_libraries(cornell.out ${ALL_LIBS})
-install(TARGETS cornell.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
+#add_executable(cornell.out "src/sonraki/cornell.cpp")
+#target_link_libraries(cornell.out ${ALL_LIBS})
+#install(TARGETS cornell.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
 
+#add_executable(fcornell.out "src/sonraki/flipedcornell.cpp")
+#target_link_libraries(fcornell.out ${ALL_LIBS})
+#install(TARGETS fcornell.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
+
+#add_executable(cornellbox.out "src/sonraki/cornellbox.cpp")
+#target_link_libraries(cornellbox.out ${ALL_LIBS})
+#install(TARGETS cornellbox.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
+
+#add_executable(cornellrotate.out "src/sonraki/cornellrotate.cpp")
+#target_link_libraries(cornellrotate.out ${ALL_LIBS})
+#install(TARGETS cornellrotate.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
+#add_executable(cornellsmoke.out "src/sonraki/cornellsmoke.cpp")
+#target_link_libraries(cornellsmoke.out ${ALL_LIBS})
+#install(TARGETS cornellsmoke.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
+
+add_executable(final.out "src/sonraki/final.cpp")
+target_link_libraries(final.out ${ALL_LIBS})
+install(TARGETS final.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
 
 # ---------- Nihai -------------------
+
+add_executable(piest.out "src/nihai/pi.cpp")
+target_link_libraries(piest.out ${ALL_LIBS})
+install(TARGETS piest.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/nihai/")
+
+add_executable(pistrat.out "src/nihai/pistrat.cpp")
+target_link_libraries(pistrat.out ${ALL_LIBS})
+install(TARGETS pistrat.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/nihai/")
+
+add_executable(integ_xsqr.out "src/nihai/integrate_xsqr.cpp")
+target_link_libraries(integ_xsqr.out ${ALL_LIBS})
+install(TARGETS integ_xsqr.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/nihai/")
+

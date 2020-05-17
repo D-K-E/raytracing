@@ -179,10 +179,10 @@ int main(void) {
   auto start = std::chrono::high_resolution_clock::now();
   // resmin yazma fonksiyonu
   double aspect_ratio = 16.0 / 9.0;
-  const int imwidth = 800;
+  const int imwidth = 640;
   const int imheight = static_cast<int>(imwidth / aspect_ratio);
-  int pixel_sample = 1000;
-  int mdepth = 100;
+  int pixel_sample = 300;
+  int mdepth = 70;
   int wslicelen = int(imwidth / THREAD_NB);
   immat imvec(imwidth, std::vector<color>(imheight, color(0)));
 
