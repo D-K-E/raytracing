@@ -53,11 +53,11 @@ inline static vec3 random_in_unit_sphere() {
   }
 }
 inline static vec3 random_unit_vector() {
-  // unit vector
+  // unit vector using spherical coordinates
   double a = random_double(0, 2 * PI);
   double z = random_double(-1, 1);
   double r = sqrt(1 - z * z);
-  return vec3(r * cos(a), r * sin(a), z);
+  return vec3(r * cos(a), r * sin(a), z); // sphere coordinates -> xyz
 }
 inline static vec3 random_in_hemisphere(const vec3 &normal) {
   // normal ekseninde dagilan yon
