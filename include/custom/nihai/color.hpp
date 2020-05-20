@@ -22,6 +22,10 @@ void write_color(std::ostream &out, color pcolor, int samples_per_pixel) {
   r = pcolor.x;
   g = pcolor.y;
   b = pcolor.z;
+  // replace nans with zero since no nans are equal to each other
+  r = (r != r) ? 0.0 : r;
+  g = (g != g) ? 0.0 : g;
+  b = (b != b) ? 0.0 : b;
   // scale sample
   r = sqrt(r * 1.0 / samples_per_pixel);
   g = sqrt(g * 1.0 / samples_per_pixel);

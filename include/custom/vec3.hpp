@@ -32,6 +32,7 @@ inline vec3 cross(const vec3 &u, const vec3 &v) {
 }
 inline vec3 to_unit(vec3 v) { return glm::normalize(v); }
 inline double length(vec3 v) { return glm::length(v); }
+inline double length_sqr(vec3 v) { return length(v) * length(v); }
 inline static vec3 random_vec() {
   // rastgele vektor uretiyor
   return vec3(random_double(), random_double(), random_double());

@@ -36,6 +36,13 @@ public:
   virtual bool hit(const Ray &r, double dist_min, double dist_max,
                    HitRecord &rec) const = 0;
   virtual bool bounding_box(double t0, double t1, Aabb &output_bbox) const = 0;
+  virtual double pdf_value(const point3 &orig, const vec3 &v) const {
+    return 0.0;
+  }
+  virtual vec3 random(const vec3 &orig) const {
+    //
+    return vec3(1, 0, 0);
+  }
 };
 
 class Translate : public Hittable {

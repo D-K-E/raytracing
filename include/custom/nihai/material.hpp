@@ -7,18 +7,28 @@
 //
 #include <custom/nihai/texture.hpp>
 //
+#include <custom/nihai/onb.hpp>
+#include <custom/nihai/pdf.hpp>
+//
+struct ScatterRecord {
+  Ray specular;
+  bool is_specular;
+  color attenuation;
+  shared_ptr<Pdf> pdf_ptr;
+};
 class Material {
 public:
   const char *mtype = "Material";
   virtual bool scatter(const Ray &ray_in, const HitRecord &record,
-                       color &attenuation, Ray &ray_out, double &pdf) const {
+                       ScatterRecord &sre) const {
     return false;
   };
   virtual double pdf_scattering(const Ray &ray_in, const HitRecord &record,
                                 Ray &ray_out) const {
-    return 0;
+    return 0.0;
   }
-  virtual color emitted(double u, double v, const point3 &p) const {
+  virtual color emitted(const Ray &r_in, const HitRecord &record, double u,
+                        double v, const point3 &p) const {
     return color(0);
   }
 };
@@ -34,22 +44,20 @@ public:
 
 public:
   Lambertian(shared_ptr<Texture> a) : albedo(a){};
-  bool scatter(const Ray &ray_in, const HitRecord &record, color &alb,
-               Ray &ray_out, double &pdf) const {
+  bool scatter(const Ray &ray_in, const HitRecord &record,
+               ScatterRecord &srec) const {
     // isik kirilsin mi kirilmasin mi
-    vec3 out_dir = record.normal + random_unit_vector();
-    ray_out = Ray(record.point, to_unit(out_dir), ray_in.time());
-    alb = albedo->value(record.u, record.v, record.point);
-    pdf = pdf_scattering(ray_in, record, ray_out); /*
-    pdf of diffuse or lambertian surface
-    scattering is simply cos theta / PI for hemisphere
-  */
+    srec.is_specular = false;
+    srec.attenuation = albedo->value(record.u, record.v, record.point);
+    srec.pdf_ptr = make_shared<CosinePdf>(record.normal);
+
     return true;
   }
   double pdf_scattering(const Ray &r_in, const HitRecord &rec,
-                        const Ray &r_out) const {
+                        Ray &r_out) const {
     double costheta = dot(rec.normal, to_unit(r_out.dir()));
-    return fmin(0, costheta) / PI;
+    // std::cerr << "costheta: " << costheta << std::endl;
+    return (costheta < 0) ? 0 : costheta / PI;
   }
 };
 class Metal : public Material {
@@ -59,18 +67,18 @@ public:
   const char *mtype = "Metal";
 
 public:
-  Metal(const color &alb, double rough) {
-    albedo = alb;
-    roughness = rough;
-  }
-  bool scatter(const Ray &ray_in, const HitRecord &record, color &attenuation,
-               Ray &ray_out) const {
+  Metal(const color &alb, double rough)
+      : albedo(alb), roughness((rough < 1) ? rough : 1) {}
+  bool scatter(const Ray &ray_in, const HitRecord &record,
+               ScatterRecord &srec) const {
     // isik kirilsin mi kirilmasin mi
-    vec3 unit_in_dir = to_unit(ray_in.direction);
+    vec3 unit_in_dir = to_unit(ray_in.dir());
     vec3 out_dir = reflect(unit_in_dir, record.normal);
-    ray_out = Ray(record.point, out_dir + roughness * random_in_unit_sphere());
-    attenuation = albedo;
-    return dot(ray_out.direction, record.normal) > 0.0;
+    srec.specular =
+        Ray(record.point, out_dir + roughness * random_in_unit_sphere());
+    srec.attenuation = albedo;
+    srec.is_specular = true;
+    return true;
   }
 };
 
@@ -118,7 +126,7 @@ public:
     return fresnel;
   }
   bool scatter(const Ray &r_in, const HitRecord &record, color &attenuation,
-               Ray &r_out) const {
+               Ray &r_out, ScatterRecord &srec) const {
     // ray out
     attenuation = color(1.0);
     vec3 unit_in_dir = to_unit(r_in.direction);
@@ -158,10 +166,13 @@ public:
     // std::cerr << "scatter color: " << std::endl;
     return false;
   }
-  virtual color emitted(double u, double v, const point3 &p) const {
-    //
-    color emitColor = emit->value(u, v, p);
-    return emitColor;
+  virtual color emitted(const Ray &r_in, const HitRecord &record, double u,
+                        double v, const point3 &p) const {
+    if (record.front_face) {
+      return emit->value(u, v, p);
+    } else {
+      return color(0);
+    }
   }
 };
 
@@ -173,15 +184,13 @@ public:
   Isotropic(shared_ptr<Texture> a) : albedo(a) {}
   virtual bool scatter(const Ray &r_in, const HitRecord &rec,
                        color &attenuation, Ray &scattered) const {
-    /*
-    As the ray passes through the volume, it may scatter at any point. The
-    denser the volume, the more likely that is. The probability that the ray
-    scatters in any small distance ΔL is:
+    // As the ray passes through the volume, it may scatter at any point. The
+    // denser the volume, the more likely that is. The probability that the ray
+    // scatters in any small distance ΔL is:
 
-    probability=C⋅ΔL
+    // probability=C⋅ΔL
 
-    where C is proportional to the optical density of the volume.
-     */
+    // where C is proportional to the optical density of the volume.
     scattered = Ray(rec.point, random_in_unit_sphere(), r_in.time());
     attenuation = albedo->value(rec.u, rec.v, rec.point);
     return true;

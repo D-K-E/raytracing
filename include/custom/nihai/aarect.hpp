@@ -87,6 +87,32 @@ public:
     output_box = Aabb(p1, p2);
     return true;
   }
+  virtual double pdf_value(const point3 &orig, const vec3 &v) const {
+    HitRecord rec;
+    if (hit(Ray(orig, v), 0.001, INF, rec) == false) {
+      //
+      return 0;
+    }
+    auto area = fabs(a0 - a1) * fabs(b0 - b1);
+    double dist_sqr = rec.dist * rec.dist * length_sqr(v, v);
+    double cosine = fabs(dot(v, rec.normal) / length(v));
+    return dist_sqr / (cosine * area);
+  }
+  virtual vec3 random(const point3 &orig) const {
+    //
+    point3 p1;
+    auto arnd = random_double(fmin(a0, a1), fmax(a0, a1));
+    auto brnd = random_double(fmin(b0, b1), fmax(b0, b1));
+    // choose points with axis
+    if (ax.notAligned == 2) {
+      p1 = point3(arnd, brnd, k);
+    } else if (ax.notAligned == 1) {
+      p1 = point3(arnd, k, brnd);
+    } else if (ax.notAligned == 0) {
+      p1 = point3(k, arnd, brnd);
+    }
+    return p1 - orig;
+  }
 };
 
 class XYRect : public AaRect {

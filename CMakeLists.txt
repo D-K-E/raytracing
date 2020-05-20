@@ -126,9 +126,9 @@ install(TARGETS bookcover.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/haftasonu/"
 #target_link_libraries(cornellsmoke.out ${ALL_LIBS})
 #install(TARGETS cornellsmoke.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
 
-add_executable(final.out "src/sonraki/final.cpp")
-target_link_libraries(final.out ${ALL_LIBS})
-install(TARGETS final.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
+#add_executable(final.out "src/sonraki/final.cpp")
+#target_link_libraries(final.out ${ALL_LIBS})
+#install(TARGETS final.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
 
 # ---------- Nihai -------------------
 
@@ -143,4 +143,42 @@ install(TARGETS pistrat.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/nihai/")
 add_executable(integ_xsqr.out "src/nihai/integrate_xsqr.cpp")
 target_link_libraries(integ_xsqr.out ${ALL_LIBS})
 install(TARGETS integ_xsqr.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/nihai/")
+
+
+add_executable(integ_xsqrpdf.out "src/nihai/integrate_xsqr_pdf.cpp")
+target_link_libraries(integ_xsqrpdf.out ${ALL_LIBS})
+install(TARGETS integ_xsqrpdf.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/nihai/")
+
+add_executable(montecarlo.out "src/nihai/montecarlo.cpp")
+target_link_libraries(montecarlo.out ${ALL_LIBS})
+install(TARGETS montecarlo.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/nihai/")
+
+#add_executable(refact_cornell.out "src/nihai/refact_cornell.cpp")
+#target_link_libraries(refact_cornell.out ${ALL_LIBS})
+#install(TARGETS refact_cornell.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/nihai/")
+
+#add_executable(refact_cornell2.out "src/nihai/refact_cornell2.cpp")
+#target_link_libraries(refact_cornell2.out ${ALL_LIBS})
+#install(TARGETS refact_cornell2.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/nihai/")
+
+#add_executable(refact_cornell3.out "src/nihai/refact_cornell3.cpp")
+#target_link_libraries(refact_cornell3.out ${ALL_LIBS})
+#install(TARGETS refact_cornell3.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/nihai/")
+
+#add_executable(cornell3.out "src/nihai/cornell3.cpp")
+#target_link_libraries(cornell3.out ${ALL_LIBS})
+#install(TARGETS cornell3.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/nihai/")
+
+#add_executable(cornell4.out "src/nihai/cornell4.cpp")
+#target_link_libraries(cornell4.out ${ALL_LIBS})
+#install(TARGETS cornell4.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/nihai/")
+add_executable(cornell5.out "src/nihai/cornell5.cpp")
+target_link_libraries(cornell5.out ${ALL_LIBS})
+install(TARGETS cornell5.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/nihai/")
+
+
+
+add_executable(final.out "src/nihai/final.cpp")
+target_link_libraries(final.out ${ALL_LIBS})
+install(TARGETS final.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/nihai/")
 

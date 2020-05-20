@@ -49,6 +49,21 @@ public:
     }
     return true;
   }
+  double pdf_value(const point3 &o, const vec3 &v) const {
+    // manage pdf of scene
+    double weight = 1.0 / objects.size();
+    double s = 0.0;
+    for (const auto &obj : objects) {
+      //
+      s += weight * obj->pdf_value(o, v);
+    }
+    return s;
+  }
+  vec3 random(const point3 &o, const vec3 &v) const {
+    //
+    int size = static_cast<int>(objects.size());
+    return objects[random_int(0, size - 1)]->random(o);
+  }
 };
 
 #endif

@@ -76,6 +76,25 @@ public:
     output_bbox = Aabb(center - vec3(radius), center + vec3(radius));
     return true;
   }
+  double pdf_value(const point3 &orig, const vec3 &v) const {
+    //
+    HitRecord rec;
+    if (this->hit(Ray(orig, v), 0.001, INF, rec) == false) {
+      return 0;
+    }
+    vec3 c_o = center - orig;
+    double costhetam = sqrt(1 - radius * radius / length_sqr(c_o));
+    double solid_angle = 2 * PI * (1 - costhetam);
+    return 1 / solid_angle;
+  }
+  vec3 random(const point3 &orig) const {
+    // produce random point on sphere
+    vec3 dir = center - orig;
+    double dist = dot(dir, dir);
+    Onb uvw;
+    uvw.build_from_w(dir);
+    return uvw.local(random_to_sphere(radius, dist));
+  }
 };
 
 class MovingSphere : public Hittable {
