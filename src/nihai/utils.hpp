@@ -26,12 +26,14 @@
 //
 #include <future>
 //
-#define THREAD_NB 5
+#define THREAD_NB 6
 using immat = std::vector<std::vector<color>>;
 //
 namespace fs = std::filesystem;
 fs::path cdir = fs::current_path();
 fs::path tpath = cdir / "texture";
+
+color ray_color(const Ray &r, const Hittable &scene, int depth);
 
 color ray_color(const Ray &r, const color &background,
                 const HittableList &scene, int depth);

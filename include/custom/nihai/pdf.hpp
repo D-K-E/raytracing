@@ -1,10 +1,47 @@
-#ifndef PDF_HPP
-#define PDF_HPP
+#ifndef PDF_H
+#define PDF_H
+//==============================================================================================
+// Originally written in 2016 by Peter Shirley <ptrshrl@gmail.com>
+//
+// To the extent possible under law, the author(s) have dedicated all copyright
+// and related and
+// neighboring rights to this software to the public domain worldwide. This
+// software is
+// distributed without any warranty.
+//
+// You should have received a copy (see file COPYING.txt) of the CC0 Public
+// Domain Dedication
+// along with this software. If not, see
+// <http://creativecommons.org/publicdomain/zero/1.0/>.
+//==============================================================================================
+
 #include <custom/nihai/commons.hpp>
-#include <custom/nihai/hittable.hpp>
+
 #include <custom/nihai/onb.hpp>
 
-// checked
+inline vec3 random_cosine_direction() {
+  auto r1 = random_double();
+  auto r2 = random_double();
+  auto z = sqrt(1 - r2);
+
+  auto phi = 2 * PI * r1;
+  auto x = cos(phi) * sqrt(r2);
+  auto y = sin(phi) * sqrt(r2);
+
+  return vec3(x, y, z);
+}
+
+inline vec3 random_to_sphere(double radius, double distance_squared) {
+  auto r1 = random_double();
+  auto r2 = random_double();
+  auto z = 1 + r2 * (sqrt(1 - radius * radius / distance_squared) - 1);
+
+  auto phi = 2 * PI * r1;
+  auto x = cos(phi) * sqrt(1 - z * z);
+  auto y = sin(phi) * sqrt(1 - z * z);
+
+  return vec3(x, y, z);
+}
 
 class Pdf {
 public:
@@ -14,82 +51,31 @@ public:
   virtual vec3 generate() const = 0;
 };
 
-inline vec3 random_cosine_dir() {
-  // random cosine direction
-  double r1 = random_double();
-  double r2 = random_double();
-  auto z = sqrt(1 - r2);
-
-  double phi = 2 * PI * r1;
-  double x = cos(phi) * sqrt(r2);
-  double y = sin(phi) * sqrt(r2);
-
-  return vec3(x, y, z);
-}
-inline vec3 random_to_sphere(double radius, double dist_sqr) {
-  // produce random point given radius dist sqr
-  /*
-
-   */
-  double r1 = random_double();
-  double r2 = random_double();
-  double z = 1 + r2 * (sqrt(1 - radius * radius / dist_sqr) - 1);
-
-  double phi = 2 * PI * r1;
-  double sqz = sqrt(1 - z * z);
-  double x = cos(phi) * sqz;
-  double y = sin(phi) * sqz;
-
-  return vec3(x, y, z);
-}
-
-inline vec3 random_to_sphere_v1() {
-  // pick point in random sphere
-  double x1 = random_double(-1, 1);
-  double x2 = random_double(-1, 1);
-  while ((x1 * x1 + x2 * x2) >= 1) {
-    x1 = random_double(-1, 1);
-    x2 = random_double(-1, 1);
-  }
-  double x = 2 * x1 * sqrt(1 - (x1 * x1) - (x2 * x2));
-  double y = 2 * x2 * sqrt(1 - (x1 * x1) - (x2 * x2));
-  double z = 1 - 2 * ((x1 * x1) + (x2 * x2));
-  return vec3(x, y, z);
-}
-
 class CosinePdf : public Pdf {
-  //
 public:
   CosinePdf(const vec3 &w) { uvw.build_from_w(w); }
 
-  virtual double value(const vec3 &dir) const {
-    //
-    double cosine = dot(to_unit(dir), uvw.w());
+  virtual double value(const vec3 &direction) const {
+    auto cosine = dot(to_unit(direction), uvw.w());
     return (cosine <= 0) ? 0 : cosine / PI;
   }
-  virtual vec3 generate() const {
-    //
-    return uvw.local(random_cosine_dir());
-  }
+
+  virtual vec3 generate() const { return uvw.local(random_cosine_direction()); }
 
 public:
   Onb uvw;
 };
 
 class HittablePdf : public Pdf {
-  //
 public:
   HittablePdf(shared_ptr<Hittable> p, const point3 &origin)
       : ptr(p), o(origin) {}
 
   virtual double value(const vec3 &direction) const {
-    //
     return ptr->pdf_value(o, direction);
   }
-  virtual vec3 generate() const {
-    //
-    return ptr->random(o);
-  }
+
+  virtual vec3 generate() const { return ptr->random(o); }
 
 public:
   point3 o;
@@ -98,24 +84,24 @@ public:
 
 class MixturePdf : public Pdf {
 public:
-  shared_ptr<Pdf> ptr[2];
+  MixturePdf(shared_ptr<Pdf> p0, shared_ptr<Pdf> p1) {
+    p[0] = p0;
+    p[1] = p1;
+  }
+
+  virtual double value(const vec3 &direction) const {
+    return 0.5 * p[0]->value(direction) + 0.5 * p[1]->value(direction);
+  }
+
+  virtual vec3 generate() const {
+    if (random_double() < 0.5)
+      return p[0]->generate();
+    else
+      return p[1]->generate();
+  }
 
 public:
-  MixturePdf(shared_ptr<Pdf> p0, shared_ptr<Pdf> p1) {
-    //
-    ptr[0] = p0;
-    ptr[1] = p1;
-  }
-  virtual double value(const vec3 &dir) const {
-    return 0.5 * ptr[0]->value(dir) + 0.5 * ptr[1]->value(dir);
-  }
-  virtual vec3 generate() const {
-    //
-    // if there were 3 pdf mixtures than it would be
-    // 0 < x < 0.3 < y < 0.6 < z < 1
-    int ptr_index = random_double() < 0.5 ? 0 : 1;
-    return ptr[ptr_index]->generate();
-  }
+  shared_ptr<Pdf> p[2];
 };
 
 #endif

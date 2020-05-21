@@ -95,7 +95,7 @@ public:
   }
   virtual double pdf_value(const point3 &orig, const vec3 &v) const {
     HitRecord rec;
-    if (hit(Ray(orig, v), 0.001, INF, rec) == false) {
+    if (this->hit(Ray(orig, v), 0.001, INF, rec) == false) {
       //
       return 0;
     }
@@ -153,6 +153,11 @@ public:
          shared_ptr<Material> mat)
       : AaRect(_x0, _x1, _z0, _z1, _k, mat, vec3(0, 1, 0)), x0(_x0), x1(_x1),
         z0(_z0), z1(_z1) {}
+
+  virtual vec3 random(const point3 &origin) const {
+    auto random_point = point3(random_double(x0, x1), k, random_double(z0, z1));
+    return random_point - origin;
+  }
 };
 class YZRect : public AaRect {
 public:

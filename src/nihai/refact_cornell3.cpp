@@ -13,7 +13,6 @@ color ray_color(const Ray &r, const color &background,
   }
   // recursive case
   Ray r_out;
-  color atten;
   color emittedColor =
       record.mat_ptr->emitted(r, record, record.u, record.v, record.point);
 
@@ -28,10 +27,14 @@ color ray_color(const Ray &r, const color &background,
   // ------------ Ray hits surface ends -------------------------
 
   // ------------ sampling light ----------------------
+
   vec3 point_on_light(random_double(213, 343), 554, random_double(227, 332));
   vec3 toward_light = point_on_light - record.point;
-  double lightDist = dot(toward_light, toward_light);
+  // vec3 toward_light = record.point - point_on_light;
+  double lightDist = length_sqr(toward_light);
   vec3 lightDir = to_unit(toward_light);
+
+  //
   if (dot(lightDir, record.normal) < 0) {
     return emittedColor;
   }
@@ -44,6 +47,7 @@ color ray_color(const Ray &r, const color &background,
   //
   pdf = lightDist / (light_cos * lightArea);
   r_out = Ray(record.point, lightDir, r.time());
+  // r_out = Ray(record.point, toward_light, r.time());
 
   // --------------------------------------------------
   color Le = emittedColor; //
@@ -133,6 +137,7 @@ int main(void) {
   // kamera
 
   std::vector<std::future<InnerRet>> futures(THREAD_NB);
+  // std::vector<InnerRet> futures(THREAD_NB);
 
   // resim yazim
   for (int t = 0; t < THREAD_NB; t++) {
@@ -141,10 +146,12 @@ int main(void) {
     InnerParams params = makeInner(startx, endx, camera, imwidth, imheight,
                                    pixel_sample, mdepth, scene);
     futures[t] = std::async(&innerLoop, params);
+    // futures[t] = innerLoop(params);
   }
   for (auto &f : futures) {
     InnerRet ret = f.get();
     joinRet2Imv(ret, imvec, imheight);
+    // joinRet2Imv(f, imvec, imheight);
   }
   for (int j = imheight - 1; j >= 0; j -= 1) {
     std::cerr << "\rKalan Tarama Çizgisi:" << ' ' << j << ' ' << std::flush;

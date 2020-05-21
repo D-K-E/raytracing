@@ -12,11 +12,18 @@ Y: yonu
    */
 public:
   Ray() {}
-  Ray(const point3 &orig, const vec3 &dir, double t = 0.0)
-      : origin(orig), direction(dir), tm(t){};
+
+  Ray(const point3 &orig, const vec3 &dir)
+      : origin(orig), direction(dir), tm(0) {}
+  Ray(const point3 &orig, const vec3 &dir, double t)
+      : origin(orig), direction(dir), tm(t) {}
+
   point3 at(double dist) const { return direction * dist + origin; }
+
   point3 orig() const { return origin; }
+
   vec3 dir() const { return direction; }
+
   double time() const { return tm; }
 
 public:
