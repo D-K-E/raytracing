@@ -16,7 +16,7 @@ struct HitRecord {
   bool front_face;
   inline void set_face_normal(const Ray &r, const vec3 &out_normal) {
     // gelen dikme on yuze mi arka yuze mi
-    front_face = dot(r.direction, out_normal) < 0;
+    front_face = dot(r.dir(), out_normal) < 0;
     normal = front_face ? out_normal : -1 * out_normal;
   }
   double u, v;

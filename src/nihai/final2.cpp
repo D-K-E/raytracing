@@ -20,12 +20,8 @@
 //
 #include <filesystem>
 #include <iostream>
+#define THREAD_NB 2
 //
-#include <thread>
-//
-#include <future>
-//
-#define THREAD_NB 6
 using immat = std::vector<std::vector<color>>;
 //
 namespace fs = std::filesystem;
@@ -33,8 +29,15 @@ fs::path cdir = fs::current_path();
 fs::path tpath = cdir / "texture";
 
 color ray_color(const Ray &r, const color &background,
-                const HittableList &scene, shared_ptr<Hittable> lights,
-                int depth) {
+                const HittableList &scene, int depth) {
+  auto lights = make_shared<HittableList>();
+  auto rect =
+      make_shared<XZRect>(213, 343, 227, 332, 554, shared_ptr<Material>());
+  lights->add(rect);
+  auto sp1 =
+      make_shared<Sphere>(point3(190, 90, 190), 90, shared_ptr<Material>());
+  lights->add(sp1);
+
   // compute ray color
   HitRecord rec;
 
@@ -67,13 +70,15 @@ color ray_color(const Ray &r, const color &background,
   if (srec.is_specular) {
     // compute specular color
     return srec.attenuation *
-           ray_color(srec.r_out, background, scene, lights, depth - 1);
+           ray_color(srec.r_out, background, scene, depth - 1);
   }
   //
   auto light_ptr = make_shared<HittablePdf>(lights, rec.point);
   MixturePdf pf(light_ptr, srec.pdf_ptr);
 
-  Ray r_out = Ray(rec.point, pf.generate(), r.time());
+  vec3 out_dir = pf.generate();
+
+  Ray r_out = Ray(rec.point, out_dir, r.time());
   double pval = pf.value(r_out.dir());
 
   // building up terms for rendering equation
@@ -82,7 +87,11 @@ color ray_color(const Ray &r, const color &background,
   //
   color Lr = srec.attenuation;
   Lr *= rec.mat_ptr->pdf_scattering(r, rec, r_out);
-  Lr *= ray_color(r_out, background, scene, lights, depth - 1);
+  //
+  color rcolor = ray_color(r_out, background, scene, depth - 1);
+  std::cerr << "color: " << rcolor << std::endl;
+
+  Lr *= rcolor;
   Lr /= pval;
   return Le + Lr;
 }
@@ -193,11 +202,6 @@ InnerRet innerLoop(InnerParams params) {
   HittableList scene = params.scene;
   immat imv(xrange, std::vector<color>(imheight, color(0)));
   color background(0);
-  auto lights = make_shared<HittableList>();
-  lights->add(
-      make_shared<XZRect>(213, 343, 227, 332, 554, shared_ptr<Material>()));
-  lights->add(
-      make_shared<Sphere>(point3(190, 90, 190), 90, shared_ptr<Material>()));
 
   for (int a = 0; a < xrange; a++) {
     for (int j = 0; j < imheight; j++) {
@@ -208,7 +212,7 @@ InnerRet innerLoop(InnerParams params) {
         double t = double(i + random_double()) / (imwidth - 1);
         double s = double(j + random_double()) / (imheight - 1);
         Ray r = camera.get_ray(t, s);
-        rcolor += ray_color(r, background, scene, lights, mdepth);
+        rcolor += ray_color(r, background, scene, mdepth);
       }
       imv[a][j] = rcolor;
     }
@@ -242,7 +246,7 @@ int main(void) {
 
   // kamera
 
-  std::vector<std::future<InnerRet>> futures(THREAD_NB);
+  std::vector<InnerRet> futures(THREAD_NB);
 
   // resim yazim
   for (int t = 0; t < THREAD_NB; t++) {
@@ -250,11 +254,11 @@ int main(void) {
     int endx = fmin(startx + wslicelen, imwidth);
     InnerParams params = makeInner(startx, endx, camera, imwidth, imheight,
                                    pixel_sample, mdepth, scene);
-    futures[t] = std::async(&innerLoop, params);
+    futures[t] = innerLoop(params);
   }
   for (auto &f : futures) {
-    InnerRet ret = f.get();
-    joinRet2Imv(ret, imvec, imheight);
+    // InnerRet ret = f.get();
+    joinRet2Imv(f, imvec, imheight);
   }
   for (int j = imheight - 1; j >= 0; j -= 1) {
     std::cerr << "\rKalan Tarama Çizgisi:" << ' ' << j << ' ' << std::flush;

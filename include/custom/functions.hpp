@@ -25,18 +25,16 @@ inline int random_int(const int &min, const int &max) {
 }
 
 //
-inline double random_double() {
-  // random double number
-  static std::uniform_real_distribution<double> distr(0.0, 1.0);
-  static std::mt19937 gen;
-  static std::function<double()> rand_gen = std::bind(distr, gen);
-  return rand_gen();
-}
 //
 inline double random_double(double min, double max) {
   // random double number in range [min, max]
-  return min + (max - min) * random_double();
+  static std::uniform_real_distribution<double> distr(min, max);
+  static thread_local std::mt19937 gen;
+  static std::function<double()> rand_gen = std::bind(distr, gen);
+  return rand_gen();
 }
+
+inline double random_double() { return random_double(0, 1); }
 //
 inline double clamp(double x, double min, double max) {
   //

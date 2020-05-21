@@ -10,9 +10,14 @@ struct AxisInfo {
   double aligned2;
   double notAligned;
 };
+inline std::ostream &operator<<(std::ostream &out, const AxisInfo &a) {
+  // yazim
+  return out << "aligned1: " << a.aligned1 << " aligned2: " << a.aligned2
+             << " not aligned: " << a.notAligned;
+}
 
 class AaRect : public Hittable {
-protected:
+public:
   vec3 axis_normal;
   double a0, a1, // aligned1
       b0, b1;    // aligned2
@@ -21,6 +26,7 @@ protected:
 public:
   double k;
   shared_ptr<Material> mat_ptr;
+  const char *mtype = "Aarect";
 
 public:
   AaRect() {}
@@ -94,7 +100,7 @@ public:
       return 0;
     }
     auto area = fabs(a0 - a1) * fabs(b0 - b1);
-    double dist_sqr = rec.dist * rec.dist * length_sqr(v, v);
+    double dist_sqr = rec.dist * rec.dist * length_sqr(v);
     double cosine = fabs(dot(v, rec.normal) / length(v));
     return dist_sqr / (cosine * area);
   }
@@ -105,19 +111,29 @@ public:
     auto brnd = random_double(fmin(b0, b1), fmax(b0, b1));
     // choose points with axis
     if (ax.notAligned == 2) {
+      // normal vec3(0,0,1)
       p1 = point3(arnd, brnd, k);
     } else if (ax.notAligned == 1) {
+      // normal vec3(0,1,0)
       p1 = point3(arnd, k, brnd);
     } else if (ax.notAligned == 0) {
+      // normal vec3(1,0,0)
       p1 = point3(k, arnd, brnd);
     }
     return p1 - orig;
   }
 };
+inline std::ostream &operator<<(std::ostream &out, const AaRect &a) {
+  // yazim
+  return out << "type: " << a.mtype << " a0: " << a.a0 << " a1: " << a.a1
+             << " b0: " << a.b0 << " b1: " << a.b1 << " k: " << a.k
+             << " axinfo: " << a.ax;
+}
 
 class XYRect : public AaRect {
 public:
   double x0, x1, y0, y1;
+  const char *mtype = "xyrect";
 
 public:
   XYRect() {}
@@ -129,6 +145,7 @@ public:
 class XZRect : public AaRect {
 public:
   double x0, x1, z0, z1;
+  const char *mtype = "xzrect";
 
 public:
   XZRect() {}
@@ -140,6 +157,7 @@ public:
 class YZRect : public AaRect {
 public:
   double y0, y1, z0, z1;
+  const char *mtype = "yzrect";
 
 public:
   YZRect() {}

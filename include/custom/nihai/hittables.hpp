@@ -12,6 +12,8 @@
 class HittableList : public Hittable {
 public:
   std::vector<std::shared_ptr<Hittable>> objects;
+
+public:
   HittableList() {}
   HittableList(shared_ptr<Hittable> object) { add(object); }
   void add(shared_ptr<Hittable> object) { objects.push_back(object); }
@@ -59,10 +61,12 @@ public:
     }
     return s;
   }
-  vec3 random(const point3 &o, const vec3 &v) const {
+  vec3 random(const point3 &o) const {
     //
     int size = static_cast<int>(objects.size());
-    return objects[random_int(0, size - 1)]->random(o);
+    shared_ptr<Hittable> obj = objects[random_int(0, size - 1)];
+    // std::cerr << "obj: " << obj << std::endl;
+    return obj->random(o);
   }
 };
 

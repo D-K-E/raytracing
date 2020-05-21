@@ -4,6 +4,8 @@
 #include <custom/nihai/hittable.hpp>
 #include <custom/nihai/onb.hpp>
 
+// checked
+
 class Pdf {
 public:
   virtual ~Pdf() {}
@@ -18,22 +20,40 @@ inline vec3 random_cosine_dir() {
   double r2 = random_double();
   auto z = sqrt(1 - r2);
 
-  auto phi = 2 * PI * r1;
-  auto x = cos(phi) * sqrt(r2);
-  auto y = sin(phi) * sqrt(r2);
+  double phi = 2 * PI * r1;
+  double x = cos(phi) * sqrt(r2);
+  double y = sin(phi) * sqrt(r2);
 
   return vec3(x, y, z);
 }
 inline vec3 random_to_sphere(double radius, double dist_sqr) {
   // produce random point given radius dist sqr
-  auto r1 = random_double();
-  auto r2 = random_double();
-  auto z = 1 + r2 * (sqrt(1 - radius * radius / dist_sqr));
+  /*
 
-  auto phi = 2 * PI * r1;
-  auto x = cos(phi) * sqrt(1 - z * z);
-  auto y = sin(phi) * sqrt(1 - z * z);
+   */
+  double r1 = random_double();
+  double r2 = random_double();
+  double z = 1 + r2 * (sqrt(1 - radius * radius / dist_sqr) - 1);
 
+  double phi = 2 * PI * r1;
+  double sqz = sqrt(1 - z * z);
+  double x = cos(phi) * sqz;
+  double y = sin(phi) * sqz;
+
+  return vec3(x, y, z);
+}
+
+inline vec3 random_to_sphere_v1() {
+  // pick point in random sphere
+  double x1 = random_double(-1, 1);
+  double x2 = random_double(-1, 1);
+  while ((x1 * x1 + x2 * x2) >= 1) {
+    x1 = random_double(-1, 1);
+    x2 = random_double(-1, 1);
+  }
+  double x = 2 * x1 * sqrt(1 - (x1 * x1) - (x2 * x2));
+  double y = 2 * x2 * sqrt(1 - (x1 * x1) - (x2 * x2));
+  double z = 1 - 2 * ((x1 * x1) + (x2 * x2));
   return vec3(x, y, z);
 }
 
@@ -93,11 +113,8 @@ public:
     //
     // if there were 3 pdf mixtures than it would be
     // 0 < x < 0.3 < y < 0.6 < z < 1
-    if (random_double() < 0.5) {
-      return ptr[0]->generate();
-    } else {
-      return ptr[1]->generate();
-    }
+    int ptr_index = random_double() < 0.5 ? 0 : 1;
+    return ptr[ptr_index]->generate();
   }
 };
 

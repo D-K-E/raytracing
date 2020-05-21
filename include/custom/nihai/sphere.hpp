@@ -19,13 +19,13 @@ public:
   Sphere() {}
   Sphere(point3 cent, double r, shared_ptr<Material> mat)
       : center(cent), radius(r), mat_ptr(mat){};
-  bool hit(const Ray &r, double dist_min, double dist_max,
-           HitRecord &record) const {
+  virtual bool hit(const Ray &r, double dist_min, double dist_max,
+                   HitRecord &record) const {
     // kureye isin vurdu mu onu test eden fonksiyon
     vec3 origin_to_center = r.origin - center;
-    double a = dot(r.direction, r.direction);
-    double half_b = dot(origin_to_center, r.direction);
-    double c = dot(origin_to_center, origin_to_center) - radius * radius;
+    double a = length_sqr(r.dir());
+    double half_b = dot(origin_to_center, r.dir());
+    double c = length_sqr(origin_to_center) - radius * radius;
     double isHit = half_b * half_b - a * c;
     double margin;
     if (isHit > 0) {
@@ -71,12 +71,12 @@ public:
     }
     return false;
   }
-  bool bounding_box(double t0, double t1, Aabb &output_bbox) const {
+  virtual bool bounding_box(double t0, double t1, Aabb &output_bbox) const {
     //
     output_bbox = Aabb(center - vec3(radius), center + vec3(radius));
     return true;
   }
-  double pdf_value(const point3 &orig, const vec3 &v) const {
+  virtual double pdf_value(const point3 &orig, const vec3 &v) const {
     //
     HitRecord rec;
     if (this->hit(Ray(orig, v), 0.001, INF, rec) == false) {
@@ -90,12 +90,16 @@ public:
   vec3 random(const point3 &orig) const {
     // produce random point on sphere
     vec3 dir = center - orig;
-    double dist = dot(dir, dir);
+    double dist = length_sqr(dir);
     Onb uvw;
     uvw.build_from_w(dir);
     return uvw.local(random_to_sphere(radius, dist));
   }
 };
+inline std::ostream &operator<<(std::ostream &out, const Sphere &s) {
+  // yazim
+  return out << "center: " << s.center << " r: " << s.radius;
+}
 
 class MovingSphere : public Hittable {
   /* Sonraki hafta */
