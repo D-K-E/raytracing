@@ -1,5 +1,5 @@
-#ifndef PDF_H
-#define PDF_H
+#ifndef PDF_HPP
+#define PDF_HPP
 //==============================================================================================
 // Originally written in 2016 by Peter Shirley <ptrshrl@gmail.com>
 //
