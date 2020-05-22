@@ -1,9 +1,9 @@
 #ifndef TEXTURE_HPP
 #define TEXTURE_HPP
-#include <custom/nihai/commons.hpp>
-#include <custom/nihai/perlin.hpp>
+#include <custom/sonraki/commons.hpp>
+#include <custom/sonraki/perlin.hpp>
 //
-#include <custom/nihai/image.hpp>
+#include <custom/sonraki/image.hpp>
 //
 // ------------ texture utils ----------------------
 
@@ -56,112 +56,111 @@ void get_sphere_uv(const vec3 &outNormal, double &u, double &v) {
 
 class Texture {
 public:
-  virtual color value(double u, double v, const vec3 &p) const = 0;
+  virtual color value(double u, double v, const point3 &p) const = 0;
 };
 
 class SolidColor : public Texture {
 public:
+  color color_value;
+
+public:
   SolidColor() {}
   SolidColor(color c) : color_value(c) {}
-
   SolidColor(double red, double green, double blue)
-      : SolidColor(color(red, green, blue)) {}
-
-  virtual color value(double u, double v, const vec3 &p) const {
+      : color_value(color(red, green, blue)) {}
+  virtual color value(double u, double v, const point3 &p) const {
+    // std::cerr << "solid color: " << color_value << std::endl;
     return color_value;
   }
-
-private:
-  color color_value;
 };
-
 class CheckerTexture : public Texture {
-public:
-  CheckerTexture() {}
-  CheckerTexture(shared_ptr<Texture> t0, shared_ptr<Texture> t1)
-      : even(t0), odd(t1) {}
-
-  virtual color value(double u, double v, const vec3 &p) const {
-    auto sines = sin(10 * p.x) * sin(10 * p.y) * sin(10 * p.z);
-    if (sines < 0)
-      return odd->value(u, v, p);
-    else
-      return even->value(u, v, p);
-  }
-
-public:
+private:
   shared_ptr<Texture> odd;
   shared_ptr<Texture> even;
-};
 
+public:
+  CheckerTexture() {}
+  CheckerTexture(shared_ptr<Texture> t1, shared_ptr<Texture> t2)
+      : odd(t1), even(t2) {}
+  virtual color value(double u, double v, const point3 &p) const {
+    double sines = sin(10 * p.x) * sin(10 * p.y) * sin(10 * p.z);
+    if (sines < 0) {
+      return odd->value(u, v, p);
+    } else {
+      return even->value(u, v, p);
+    }
+  }
+};
 class NoiseTexture : public Texture {
 public:
   NoiseTexture() {}
   NoiseTexture(double sc) : scale(sc) {}
-
-  virtual color value(double u, double v, const vec3 &p) const {
-    // return color(1,1,1)*0.5*(1 + noise.turb(scale * p));
-    // return color(1,1,1)*noise.turb(scale * p);
-    return color(1) * 0.5 * (1 + sin(scale * p.z + 10 * noise.turb(p)));
+  virtual color value(double u, double v, const point3 &p) const {
+    auto tmp = 1.0 + sin(scale * p.z + 10 * noise.turb(p));
+    return color(1) * 0.5 * tmp;
   }
 
 public:
   Perlin noise;
   double scale;
 };
-
 class ImageTexture : public Texture {
-public:
-  const static int bytes_per_pixel = 3;
+  /*
+     Texture mapping and sampling
+So instead, one of the the most universal unofficial standards in graphics is to
+use texture coordinates instead of image pixel coordinates. These are just some
+form of fractional position in the image. For example, for pixel (i,j) in an Nx
+by Ny image, the image texture position is:
 
-  ImageTexture() : data(nullptr), width(0), height(0), bytes_per_scanline(0) {}
+u=i / Nx−1
+v=j / Ny−1
 
-  ImageTexture(const char *filename) {
-    auto components_per_pixel = bytes_per_pixel;
+This is just a fractional position. For a hittable, we need to also return a u
+and v in the hit record.
 
-    data = stbi_load(filename, &width, &height, &components_per_pixel,
-                     components_per_pixel);
-
-    if (!data) {
-      std::cerr << "ERROR: Could not load texture image file '" << filename
-                << "'.\n";
-      width = height = 0;
-    }
-
-    bytes_per_scanline = bytes_per_pixel * width;
-  }
-
-  ~ImageTexture() { delete data; }
-
-  virtual color value(double u, double v, const vec3 &p) const {
-    // If we have no texture data, then return solid cyan as a debugging aid.
-    if (data == nullptr)
-      return color(0, 1, 1);
-
-    // Clamp input texture coordinates to [0,1] x [1,0]
-    u = clamp(u, 0.0, 1.0);
-    v = 1.0 - clamp(v, 0.0, 1.0); // Flip V to image coordinates
-
-    auto i = static_cast<int>(u * width);
-    auto j = static_cast<int>(v * height);
-
-    // Clamp integer mapping, since actual coordinates should be less than 1.0
-    if (i >= width)
-      i = width - 1;
-    if (j >= height)
-      j = height - 1;
-
-    const auto color_scale = 1.0 / 255.0;
-    auto pixel = data + j * bytes_per_scanline + i * bytes_per_pixel;
-
-    return color(color_scale * pixel[0], color_scale * pixel[1],
-                 color_scale * pixel[2]);
-  }
-
+For spheres:
+u = phi / 2pi
+v = theta / pi
+phi = atan2(y,x)
+theta = asin(z)
+   */
 private:
-  unsigned char *data;
   int width, height;
-  int bytes_per_scanline;
+  Image img;
+
+public:
+  ImageTexture() : width(0), height(0) {}
+  ImageTexture(const char *filename) {
+    // simple support for png files as well
+    img = Image(filename);
+    width = img.w();
+    height = img.h();
+  }
+  virtual color value(double u, double v, const vec3 &p) const {
+    //
+    if (img.w() == 0 && img.h() == 0) {
+      // image not loaded is returned as cyan for debugging
+      std::cerr << "imdata empty" << std::endl;
+      return color(0.0, 1, 0);
+    }
+    // clamp input texture coordinates [0,1] x [1,0]
+    u = clamp(u, 0.0, 1.0);
+    v = 1.0 - clamp(v, 0.0, 1.0);
+
+    int x = static_cast<int>(u * width);
+    int y = static_cast<int>(v * height);
+    if (x >= width) {
+      x = width - 1;
+    }
+    if (y >= height) {
+      y = height - 1;
+    }
+    color imc = img.getPixelValue(x, y) / 255.0;
+    // std::cerr << "w: " << w << " h: " << h << " c: " << imc << std::endl;
+    // std::cerr << "w: " << w << " h: " << h << " c: " << imc << " p: " << p
+    //          << " u: " << u << " v: " << v << std::endl;
+    return imc;
+  }
 };
 
 #endif

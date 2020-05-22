@@ -33,18 +33,6 @@ public:
     return false;
   }
 
-  virtual bool scatter(const Ray &ray_in, const HitRecord &record,
-                       vec3 &attenuation, Ray &r_out, double &pdf) const {
-    return false;
-  }
-  virtual bool scatter(const Ray &ray_in, const HitRecord &record,
-                       vec3 &attenuation, Ray &r_out) const {
-    return false;
-  }
-  virtual color emitted(double u, double v, const point3 &p) const {
-    return color(0);
-  }
-
   virtual double pdf_scattering(const Ray &r_in, const HitRecord &rec,
                                 const Ray &scattered) const {
     return 0;
@@ -129,11 +117,6 @@ public:
     return true;
   }
 
-  virtual bool scatter(const Ray &ray_in, const HitRecord &record,
-                       vec3 &attenuation, Ray &r_out, double &pdf) const;
-  virtual bool scatter(const Ray &ray_in, const HitRecord &record,
-                       vec3 &attenuation, Ray &r_out) const;
-
   double pdf_scattering(const Ray &r_in, const HitRecord &rec,
                         const Ray &scattered) const {
     auto cosine = dot(rec.normal, to_unit(scattered.dir()));
@@ -143,25 +126,6 @@ public:
 public:
   shared_ptr<Texture> albedo;
 };
-bool Lambertian::scatter(const Ray &ray_in, const HitRecord &record,
-                         vec3 &attenuation, Ray &r_out, double &pdf) const {
-  // isik kirilsin mi kirilmasin mi
-  attenuation = albedo->value(record.u, record.v, record.point);
-  auto pdf_ptr = make_shared<CosinePdf>(record.normal);
-  r_out = Ray(record.point, pdf_ptr->generate(), ray_in.time());
-  pdf = pdf_ptr->value(record.normal);
-
-  return true;
-}
-bool Lambertian::scatter(const Ray &ray_in, const HitRecord &record,
-                         vec3 &attenuation, Ray &r_out) const {
-  // isik kirilsin mi kirilmasin mi
-  attenuation = albedo->value(record.u, record.v, record.point);
-  auto pdf_ptr = make_shared<CosinePdf>(record.normal);
-  r_out = Ray(record.point, pdf_ptr->generate(), ray_in.time());
-
-  return true;
-}
 
 class Metal : public Material {
 public:

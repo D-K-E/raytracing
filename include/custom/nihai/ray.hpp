@@ -1,7 +1,7 @@
 #ifndef RAY_HPP
 #define RAY_HPP
 
-#include <custom/vec3.hpp>
+#include <custom/nihai/vec3.hpp>
 
 class Ray {
   /*N = C + mY

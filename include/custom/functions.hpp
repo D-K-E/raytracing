@@ -11,18 +11,6 @@ inline double degree_to_radian(double degree) {
   //
   return degree * PI / 180;
 }
-inline int random_int() {
-  // from so: https://stackoverflow.com/a/21238187
-  static thread_local std::mt19937 generator;
-  std::uniform_int_distribution<int> distribution(0, 1);
-  return distribution(generator);
-}
-inline int random_int(const int &min, const int &max) {
-  // from so: https://stackoverflow.com/a/21238187
-  static thread_local std::mt19937 generator;
-  std::uniform_int_distribution<int> distribution(min, max);
-  return distribution(generator);
-}
 
 //
 //
@@ -35,6 +23,14 @@ inline double random_double(double min, double max) {
 }
 
 inline double random_double() { return random_double(0, 1); }
+inline int random_int() {
+  // from so: https://stackoverflow.com/a/21238187
+  return static_cast<int>(random_double());
+}
+inline int random_int(const int &min, const int &max) {
+  return static_cast<int>(random_double(min, max));
+}
+
 //
 inline double clamp(double x, double min, double max) {
   //
