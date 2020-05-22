@@ -32,59 +32,38 @@ namespace fs = std::filesystem;
 fs::path cdir = fs::current_path();
 fs::path tpath = cdir / "texture";
 
-color ray_color(const Ray &r, const color &background,
-                const HittableList &scene, shared_ptr<Hittable> lights,
-                int depth) {
-  // compute ray color
+color ray_color(const Ray &r, const color &background, const Hittable &world,
+                shared_ptr<Hittable> lights, int depth) {
   HitRecord rec;
 
-  // --------- end of depth -------------
-  if (depth <= 0) {
-    return color(0);
-  }
-  // --------- end of depth -------------
+  // If we've exceeded the ray bounce limit, no more light is gathered.
+  if (depth <= 0)
+    return color(0, 0, 0);
 
-  // --------- ray hits nothing ------------
-  if (scene.hit(r, 0.001, INF, rec) == false) {
+  // If the ray hits nothing, return the background color.
+  if (!world.hit(r, 0.001, INF, rec))
     return background;
-  }
-  // --------- ray hits nothing end --------
 
-  ScatterRecord srec; // so ray hit something
+  ScatterRecord srec;
   color emitted = rec.mat_ptr->emitted(r, rec, rec.u, rec.v, rec.point);
 
-  // ray hit an object that can not scatter, ie light, or radio active stuff
-
-  // emitting object
-  if (rec.mat_ptr->scatter(r, rec, srec) == false) {
+  if (!rec.mat_ptr->scatter(r, rec, srec))
     return emitted;
-  }
-  // end emitting object
 
-  // start scattering object
-
-  // is scattering object specular
   if (srec.is_specular) {
-    // compute specular color
     return srec.attenuation *
-           ray_color(srec.r_out, background, scene, lights, depth - 1);
+           ray_color(srec.r_out, background, world, lights, depth - 1);
   }
-  //
+
   auto light_ptr = make_shared<HittablePdf>(lights, rec.point);
-  MixturePdf pf(light_ptr, srec.pdf_ptr);
+  MixturePdf p(light_ptr, srec.pdf_ptr);
+  Ray scattered = Ray(rec.point, p.generate(), r.time());
+  auto pdf_val = p.value(scattered.dir());
 
-  Ray r_out = Ray(rec.point, pf.generate(), r.time());
-  double pval = pf.value(r_out.dir());
-
-  // building up terms for rendering equation
-  color Le = emitted;
-
-  //
-  color Lr = srec.attenuation;
-  Lr *= rec.mat_ptr->pdf_scattering(r, rec, r_out);
-  Lr *= ray_color(r_out, background, scene, lights, depth - 1);
-  Lr /= pval;
-  return Le + Lr;
+  return emitted +
+         srec.attenuation * rec.mat_ptr->pdf_scattering(r, rec, scattered) *
+             ray_color(scattered, background, world, lights, depth - 1) /
+             pdf_val;
 }
 
 HittableList cornell_box(TimeRayCamera &cam, double aspect_ratio) {
