@@ -1,0 +1,172 @@
+// Kure objesi
+#ifndef SPHERE_HPP
+#define SPHERE_HPP
+
+//
+#include <custom/sonraki/commons.hpp> // vek3, ray
+//
+#include <custom/sonraki/hittable.hpp>
+//
+#include <custom/sonraki/material.hpp>
+//
+class Sphere : public Hittable {
+public:
+  point3 center;
+  double radius;
+  shared_ptr<Material> mat_ptr;
+
+public:
+  Sphere() {}
+  Sphere(point3 cent, double r, shared_ptr<Material> mat)
+      : center(cent), radius(r), mat_ptr(mat){};
+  virtual bool hit(const Ray &r, double tmin, double tmax,
+                   HitRecord &rec) const;
+  virtual bool bounding_box(double t0, double t1, Aabb &output_box) const;
+  virtual double pdf_value(const point3 &o, const vec3 &v) const;
+  virtual vec3 random(const point3 &o) const;
+};
+bool Sphere::hit(const Ray &r, double dist_min, double dist_max,
+                 HitRecord &record) const {
+  // kureye isin vurdu mu onu test eden fonksiyon
+  vec3 origin_to_center = r.origin - center;
+  double a = length_sqr(r.dir());
+  double half_b = dot(origin_to_center, r.dir());
+  double c = length_sqr(origin_to_center) - radius * radius;
+  double isHit = half_b * half_b - a * c;
+  double margin;
+  if (isHit > 0) {
+    double root = sqrt(isHit);
+    margin = (-1 * half_b - root) / a;
+    if (margin < dist_max && margin > dist_min) {
+      record.dist = margin;
+      record.point = r.at(record.dist);
+      vec3 out_normal = (record.point - center) / radius;
+      record.set_face_normal(r, out_normal);
+      if (record.front_face) {
+        // ray is outside of the sphere
+        // the normal points from center to outside
+        get_sphere_uv(record.normal, record.u, record.v);
+      } else {
+        // ray is inside of the sphere
+        // the normal points from inside to center
+        get_sphere_uv(-record.normal, record.u, record.v);
+      }
+      // get_sphere_uv((record.point - center) / radius, record.u, record.v);
+      record.mat_ptr = mat_ptr;
+      return true;
+    }
+    margin = (-1 * half_b + root) / a;
+    if (margin < dist_max && margin > dist_min) {
+      record.dist = margin;
+      record.point = r.at(record.dist);
+      vec3 out_normal = (record.point - center) / radius;
+      record.set_face_normal(r, out_normal);
+      if (record.front_face) {
+        // ray is outside of the sphere
+        // the normal points from center to outside
+        get_sphere_uv(record.normal, record.u, record.v);
+      } else {
+        // ray is inside of the sphere
+        // the normal points from inside to center
+        get_sphere_uv(-record.normal, record.u, record.v);
+      }
+      // get_sphere_uv((record.point - center) / radius, record.u, record.v);
+      record.mat_ptr = mat_ptr;
+      return true;
+    }
+  }
+  return false;
+}
+bool Sphere::bounding_box(double t0, double t1, Aabb &output_bbox) const {
+  //
+  output_bbox = Aabb(center - vec3(radius), center + vec3(radius));
+  return true;
+}
+double Sphere::pdf_value(const point3 &orig, const vec3 &v) const {
+  //
+  HitRecord rec;
+  if (this->hit(Ray(orig, v), 0.001, INF, rec) == false) {
+    return 0;
+  }
+  vec3 c_o = center - orig;
+  double costhetam = sqrt(1 - radius * radius / length_sqr(c_o));
+  double solid_angle = 2 * PI * (1 - costhetam);
+  return 1 / solid_angle;
+}
+vec3 Sphere::random(const point3 &orig) const {
+  // produce random point on sphere
+  vec3 dir = center - orig;
+  double dist = length_sqr(dir);
+  Onb uvw;
+  uvw.build_from_w(dir);
+  return uvw.local(random_to_sphere(radius, dist));
+}
+
+inline std::ostream &operator<<(std::ostream &out, const Sphere &s) {
+  // yazim
+  return out << "center: " << s.center << " r: " << s.radius;
+}
+
+class MovingSphere : public Hittable {
+  /* Sonraki hafta */
+public:
+  point3 center1, center2;
+  double time1, time2, radius;
+  shared_ptr<Material> mat_ptr;
+
+public:
+  MovingSphere() {}
+  MovingSphere(point3 cent1, point3 cent2, double t1, double t2, double rad,
+               shared_ptr<Material> mat)
+      : center1(cent1), center2(cent2), time1(t1), time2(t2), radius(rad),
+        mat_ptr(mat) {}
+  point3 center(double time) const;
+  virtual bool hit(const Ray &r, double dist_min, double dist_max,
+                   HitRecord &record) const;
+  virtual bool bounding_box(double t0, double t1, Aabb &output_bbox) const;
+};
+
+point3 MovingSphere::center(double time) const {
+  return center1 + ((time - time1) / (time2 - time1)) * (center2 - center1);
+}
+bool MovingSphere::hit(const Ray &r, double dist_min, double dist_max,
+                       HitRecord &record) const {
+  // kureye vurdu mu
+  vec3 origin_to_center = r.origin - center(r.time());
+  double a = dot(r.direction, r.direction);
+  double half_b = dot(origin_to_center, r.direction);
+  double c = dot(origin_to_center, origin_to_center) - radius * radius;
+  double isHit = half_b * half_b - a * c;
+  double margin;
+  if (isHit > 0) {
+    double root = sqrt(isHit);
+    margin = (-1 * half_b - root) / a;
+    if (margin < dist_max && margin > dist_min) {
+      record.dist = margin;
+      record.point = r.at(record.dist);
+      vec3 out_normal = (record.point - center(r.time())) / radius;
+      record.set_face_normal(r, out_normal);
+      record.mat_ptr = mat_ptr;
+      return true;
+    }
+    margin = (-1 * half_b + root) / a;
+    if (margin < dist_max && margin > dist_min) {
+      record.dist = margin;
+      record.point = r.at(record.dist);
+      vec3 out_normal = (record.point - center(r.time())) / radius;
+      record.set_face_normal(r, out_normal);
+      record.mat_ptr = mat_ptr;
+      return true;
+    }
+  }
+  return false;
+}
+bool MovingSphere::bounding_box(double t0, double t1, Aabb &output_bbox) const {
+  //
+  Aabb b1(center(t0) - vec3(radius), center(t0) + vec3(radius));
+  Aabb b2(center(t1) - vec3(radius), center(t1) + vec3(radius));
+  output_bbox = surrounding_box(b1, b2);
+  return true;
+}
+
+#endif
