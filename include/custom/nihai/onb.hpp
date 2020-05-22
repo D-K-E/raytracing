@@ -4,9 +4,9 @@
 
 // checked
 
-class Onb {
+class onb {
 public:
-  Onb() {}
+  onb() {}
 
   inline vec3 operator[](int i) const { return axis[i]; }
 
@@ -18,7 +18,9 @@ public:
     return a * u() + b * v() + c * w();
   }
 
-  vec3 local(const vec3 &a) const { return a.x * u() + a.y * v() + a.z * w(); }
+  vec3 local(const vec3 &a) const {
+    return a.x() * u() + a.y() * v() + a.z() * w();
+  }
 
   void build_from_w(const vec3 &);
 
@@ -26,10 +28,10 @@ public:
   vec3 axis[3];
 };
 
-void Onb::build_from_w(const vec3 &n) {
-  axis[2] = to_unit(n);
-  vec3 a = (fabs(w().x) > 0.9) ? vec3(0, 1, 0) : vec3(1, 0, 0);
-  axis[1] = to_unit(cross(w(), a));
+void onb::build_from_w(const vec3 &n) {
+  axis[2] = unit_vector(n);
+  vec3 a = (fabs(w().x()) > 0.9) ? vec3(0, 1, 0) : vec3(1, 0, 0);
+  axis[1] = unit_vector(cross(w(), a));
   axis[0] = cross(w(), v());
 }
 

@@ -3,33 +3,24 @@
 
 #include <custom/nihai/vec3.hpp>
 
-class Ray {
-  /*N = C + mY
-N: nokta
-C: cikis yeri
-m: mesafe/buyukluk
-Y: yonu
-   */
+class ray {
 public:
-  Ray() {}
+  ray() {}
+  ray(const point3 &origin, const vec3 &direction)
+      : orig(origin), dir(direction), tm(0) {}
 
-  Ray(const point3 &orig, const vec3 &dir)
-      : origin(orig), direction(dir), tm(0) {}
-  Ray(const point3 &orig, const vec3 &dir, double t)
-      : origin(orig), direction(dir), tm(t) {}
+  ray(const point3 &origin, const vec3 &direction, double time)
+      : orig(origin), dir(direction), tm(time) {}
 
-  point3 at(double dist) const { return direction * dist + origin; }
-
-  point3 orig() const { return origin; }
-
-  vec3 dir() const { return direction; }
-
+  point3 origin() const { return orig; }
+  vec3 direction() const { return dir; }
   double time() const { return tm; }
 
+  point3 at(double t) const { return orig + t * dir; }
+
 public:
-  vec3 direction;
-  point3 origin;
+  point3 orig;
+  vec3 dir;
   double tm;
 };
-
 #endif

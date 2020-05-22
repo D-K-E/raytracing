@@ -1,7 +1,7 @@
 #ifndef PERLIN_HPP
 #define PERLIN_HPP
 //
-#include <custom/nihai/commons.hpp>
+#include <custom/sonraki/commons.hpp>
 //
 
 class Perlin {

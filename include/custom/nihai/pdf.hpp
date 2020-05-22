@@ -24,7 +24,7 @@ inline vec3 random_cosine_direction() {
   auto r2 = random_double();
   auto z = sqrt(1 - r2);
 
-  auto phi = 2 * PI * r1;
+  auto phi = 2 * pi * r1;
   auto x = cos(phi) * sqrt(r2);
   auto y = sin(phi) * sqrt(r2);
 
@@ -36,39 +36,39 @@ inline vec3 random_to_sphere(double radius, double distance_squared) {
   auto r2 = random_double();
   auto z = 1 + r2 * (sqrt(1 - radius * radius / distance_squared) - 1);
 
-  auto phi = 2 * PI * r1;
+  auto phi = 2 * pi * r1;
   auto x = cos(phi) * sqrt(1 - z * z);
   auto y = sin(phi) * sqrt(1 - z * z);
 
   return vec3(x, y, z);
 }
 
-class Pdf {
+class pdf {
 public:
-  virtual ~Pdf() {}
+  virtual ~pdf() {}
 
   virtual double value(const vec3 &direction) const = 0;
   virtual vec3 generate() const = 0;
 };
 
-class CosinePdf : public Pdf {
+class cosine_pdf : public pdf {
 public:
-  CosinePdf(const vec3 &w) { uvw.build_from_w(w); }
+  cosine_pdf(const vec3 &w) { uvw.build_from_w(w); }
 
   virtual double value(const vec3 &direction) const {
-    auto cosine = dot(to_unit(direction), uvw.w());
-    return (cosine <= 0) ? 0 : cosine / PI;
+    auto cosine = dot(unit_vector(direction), uvw.w());
+    return (cosine <= 0) ? 0 : cosine / pi;
   }
 
   virtual vec3 generate() const { return uvw.local(random_cosine_direction()); }
 
 public:
-  Onb uvw;
+  onb uvw;
 };
 
-class HittablePdf : public Pdf {
+class hittable_pdf : public pdf {
 public:
-  HittablePdf(shared_ptr<Hittable> p, const point3 &origin)
+  hittable_pdf(shared_ptr<hittable> p, const point3 &origin)
       : ptr(p), o(origin) {}
 
   virtual double value(const vec3 &direction) const {
@@ -79,12 +79,12 @@ public:
 
 public:
   point3 o;
-  shared_ptr<Hittable> ptr;
+  shared_ptr<hittable> ptr;
 };
 
-class MixturePdf : public Pdf {
+class mixture_pdf : public pdf {
 public:
-  MixturePdf(shared_ptr<Pdf> p0, shared_ptr<Pdf> p1) {
+  mixture_pdf(shared_ptr<pdf> p0, shared_ptr<pdf> p1) {
     p[0] = p0;
     p[1] = p1;
   }
@@ -101,7 +101,7 @@ public:
   }
 
 public:
-  shared_ptr<Pdf> p[2];
+  shared_ptr<pdf> p[2];
 };
 
 #endif

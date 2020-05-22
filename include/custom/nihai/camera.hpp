@@ -1,17 +1,16 @@
-// Author: Kaan Eraslan
 // includes
 #ifndef CAMERA_HPP
 #define CAMERA_HPP
 
 #include <custom/nihai/commons.hpp>
 
-class Camera {
+class camera {
 public:
-  Camera()
-      : Camera(point3(0, 0, -1), point3(0, 0, 0), vec3(0, 1, 0), 40, 1, 0, 10) {
+  camera()
+      : camera(point3(0, 0, -1), point3(0, 0, 0), vec3(0, 1, 0), 40, 1, 0, 10) {
   }
 
-  Camera(point3 lookfrom, point3 lookat, vec3 vup,
+  camera(point3 lookfrom, point3 lookat, vec3 vup,
          double vfov, // vertical field-of-view in degrees
          double aspect_ratio, double aperture, double focus_dist, double t0 = 0,
          double t1 = 0) {
@@ -20,12 +19,12 @@ public:
     time0 = t0;
     time1 = t1;
 
-    auto theta = degree_to_radian(vfov);
+    auto theta = degrees_to_radians(vfov);
     auto half_height = tan(theta / 2);
     auto half_width = aspect_ratio * half_height;
 
-    w = to_unit(lookfrom - lookat);
-    u = to_unit(cross(vup, w));
+    w = unit_vector(lookfrom - lookat);
+    u = unit_vector(cross(vup, w));
     v = cross(w, u);
 
     lower_left_corner = origin - half_width * focus_dist * u -
@@ -35,10 +34,10 @@ public:
     vertical = 2 * half_height * focus_dist * v;
   }
 
-  Ray get_ray(double s, double t) const {
+  ray get_ray(double s, double t) const {
     vec3 rd = lens_radius * random_in_unit_disk();
-    vec3 offset = u * rd.x + v * rd.y;
-    return Ray(origin + offset, lower_left_corner + s * horizontal +
+    vec3 offset = u * rd.x() + v * rd.y();
+    return ray(origin + offset, lower_left_corner + s * horizontal +
                                     t * vertical - origin - offset,
                random_double(time0, time1));
   }
@@ -52,9 +51,5 @@ private:
   double lens_radius;
   double time0, time1; // shutter open/close times
 };
-
-using RayCamera = Camera;
-using RayCameraLens = Camera;
-using TimeRayCamera = Camera;
 
 #endif

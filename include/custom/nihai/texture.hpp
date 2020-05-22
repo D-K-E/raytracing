@@ -1,9 +1,14 @@
 #ifndef TEXTURE_HPP
 #define TEXTURE_HPP
-#include <custom/nihai/commons.hpp>
-#include <custom/nihai/perlin.hpp>
 //
-#include <custom/nihai/image.hpp>
+#define STB_IMAGE_IMPLEMENTATION
+#include <custom/stb_image.h>
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include <custom/stb_image_write.h>
+//
+#include <custom/nihai/commons.hpp>
+#include <custom/nihai/perlin2.hpp>
+//
 //
 // ------------ texture utils ----------------------
 
@@ -12,17 +17,22 @@ void get_sphere_uv(const vec3 &outNormal, double &u, double &v) {
   // http://www.cse.msu.edu/~cse872/tutorial4.html
   //    The interesting problem for the sphere is to determine the texture
   //    coordinates
-  //    for each vertex.  One way to look at this problem is to use the surface
+  //    for each vertex.  One way to look at this problem is to use the
+surface
   //    normal
-  //    as way to tell where we are on the face of the sphere.  If we consider
+  //    as way to tell where we are on the face of the sphere.  If we
+consider
   //    this a
-  //    vector from the inside of the sphere, we can easily compute the latitude
+  //    vector from the inside of the sphere, we can easily compute the
+latitude
   //    and
-  //    longitude on the surface of the globe.  These values correspond to point
+  //    longitude on the surface of the globe.  These values correspond to
+point
   //    on the
   //    map.
 
-  //    Right after the call to glBegin(GL_TRIANGLES), add the following code:
+  //    Right after the call to glBegin(GL_TRIANGLES), add the following
+code:
 
   //      // What's the texture coordinate for this normal?
   //      tx1 = atan2(a[0], a[2]) / (2. * GR_PI) + 0.5;
@@ -32,13 +42,16 @@ void get_sphere_uv(const vec3 &outNormal, double &u, double &v) {
 
   //    So, what does this do?  a[0] and a[2] are the X and Z values of the
   //    normal.  If
-  //    you look straight down onto the globe from the top, the vector made up
+  //    you look straight down onto the globe from the top, the vector made
+up
   //    of the X
-  //    and Z values will tell you the longitude on the globe!  I use atan2 to
+  //    and Z values will tell you the longitude on the globe!  I use atan2
+to
   //    convert
   //    that to an angle in radians.  This angle is between -PI and PI.  I
   //    divide by
-  //    2PI, so it's now between -.5 and .5.  Adding 0.5 makes it range from 0
+  //    2PI, so it's now between -.5 and .5.  Adding 0.5 makes it range from
+0
   //    to 1.
   //    This is the X value in the texture map.
   //    double phi = atan2(outNormal.x, outNormal.z);
@@ -53,19 +66,18 @@ void get_sphere_uv(const vec3 &outNormal, double &u, double &v) {
 */
 
 // -------------------------------------------------
-
-class Texture {
+class texture {
 public:
   virtual color value(double u, double v, const vec3 &p) const = 0;
 };
 
-class SolidColor : public Texture {
+class solid_color : public texture {
 public:
-  SolidColor() {}
-  SolidColor(color c) : color_value(c) {}
+  solid_color() {}
+  solid_color(color c) : color_value(c) {}
 
-  SolidColor(double red, double green, double blue)
-      : SolidColor(color(red, green, blue)) {}
+  solid_color(double red, double green, double blue)
+      : solid_color(color(red, green, blue)) {}
 
   virtual color value(double u, double v, const vec3 &p) const {
     return color_value;
@@ -75,14 +87,14 @@ private:
   color color_value;
 };
 
-class CheckerTexture : public Texture {
+class checker_texture : public texture {
 public:
-  CheckerTexture() {}
-  CheckerTexture(shared_ptr<Texture> t0, shared_ptr<Texture> t1)
+  checker_texture() {}
+  checker_texture(shared_ptr<texture> t0, shared_ptr<texture> t1)
       : even(t0), odd(t1) {}
 
   virtual color value(double u, double v, const vec3 &p) const {
-    auto sines = sin(10 * p.x) * sin(10 * p.y) * sin(10 * p.z);
+    auto sines = sin(10 * p.x()) * sin(10 * p.y()) * sin(10 * p.z());
     if (sines < 0)
       return odd->value(u, v, p);
     else
@@ -90,33 +102,33 @@ public:
   }
 
 public:
-  shared_ptr<Texture> odd;
-  shared_ptr<Texture> even;
+  shared_ptr<texture> odd;
+  shared_ptr<texture> even;
 };
 
-class NoiseTexture : public Texture {
+class noise_texture : public texture {
 public:
-  NoiseTexture() {}
-  NoiseTexture(double sc) : scale(sc) {}
+  noise_texture() {}
+  noise_texture(double sc) : scale(sc) {}
 
   virtual color value(double u, double v, const vec3 &p) const {
     // return color(1,1,1)*0.5*(1 + noise.turb(scale * p));
     // return color(1,1,1)*noise.turb(scale * p);
-    return color(1) * 0.5 * (1 + sin(scale * p.z + 10 * noise.turb(p)));
+    return color(1, 1, 1) * 0.5 * (1 + sin(scale * p.z() + 10 * noise.turb(p)));
   }
 
 public:
-  Perlin noise;
+  perlin noise;
   double scale;
 };
 
-class ImageTexture : public Texture {
+class image_texture : public texture {
 public:
   const static int bytes_per_pixel = 3;
 
-  ImageTexture() : data(nullptr), width(0), height(0), bytes_per_scanline(0) {}
+  image_texture() : data(nullptr), width(0), height(0), bytes_per_scanline(0) {}
 
-  ImageTexture(const char *filename) {
+  image_texture(const char *filename) {
     auto components_per_pixel = bytes_per_pixel;
 
     data = stbi_load(filename, &width, &height, &components_per_pixel,
@@ -131,7 +143,7 @@ public:
     bytes_per_scanline = bytes_per_pixel * width;
   }
 
-  ~ImageTexture() { delete data; }
+  ~image_texture() { delete data; }
 
   virtual color value(double u, double v, const vec3 &p) const {
     // If we have no texture data, then return solid cyan as a debugging aid.
