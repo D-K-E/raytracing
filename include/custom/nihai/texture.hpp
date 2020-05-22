@@ -7,42 +7,50 @@
 //
 // ------------ texture utils ----------------------
 
+/*
 void get_sphere_uv(const vec3 &outNormal, double &u, double &v) {
   // http://www.cse.msu.edu/~cse872/tutorial4.html
-  /*
-The interesting problem for the sphere is to determine the texture coordinates
-for each vertex.  One way to look at this problem is to use the surface normal
-as way to tell where we are on the face of the sphere.  If we consider this a
-vector from the inside of the sphere, we can easily compute the latitude and
-longitude on the surface of the globe.  These values correspond to point on the
-map.
+  //    The interesting problem for the sphere is to determine the texture
+  //    coordinates
+  //    for each vertex.  One way to look at this problem is to use the surface
+  //    normal
+  //    as way to tell where we are on the face of the sphere.  If we consider
+  //    this a
+  //    vector from the inside of the sphere, we can easily compute the latitude
+  //    and
+  //    longitude on the surface of the globe.  These values correspond to point
+  //    on the
+  //    map.
 
-Right after the call to glBegin(GL_TRIANGLES), add the following code:
+  //    Right after the call to glBegin(GL_TRIANGLES), add the following code:
 
-  // What's the texture coordinate for this normal?
-  tx1 = atan2(a[0], a[2]) / (2. * GR_PI) + 0.5;
-  ty1 = asin(a[1]) / GR_PI + .5;
+  //      // What's the texture coordinate for this normal?
+  //      tx1 = atan2(a[0], a[2]) / (2. * GR_PI) + 0.5;
+  //      ty1 = asin(a[1]) / GR_PI + .5;
 
-  glTexCoord2f(tx1, ty1);
+  //      glTexCoord2f(tx1, ty1);
 
-So, what does this do?  a[0] and a[2] are the X and Z values of the normal.  If
-you look straight down onto the globe from the top, the vector made up of the X
-and Z values will tell you the longitude on the globe!  I use atan2 to convert
-that to an angle in radians.  This angle is between -PI and PI.  I divide by
-2PI, so it's now between -.5 and .5.  Adding 0.5 makes it range from 0 to 1.
-This is the X value in the texture map.
-   */
-  /*
-double phi = atan2(outNormal.x, outNormal.z);
-double theta = asin(outNormal.y);
-u = 0.5 + (phi / 2 * PI);
-v = 0.5 + (theta / PI);
-*/
+  //    So, what does this do?  a[0] and a[2] are the X and Z values of the
+  //    normal.  If
+  //    you look straight down onto the globe from the top, the vector made up
+  //    of the X
+  //    and Z values will tell you the longitude on the globe!  I use atan2 to
+  //    convert
+  //    that to an angle in radians.  This angle is between -PI and PI.  I
+  //    divide by
+  //    2PI, so it's now between -.5 and .5.  Adding 0.5 makes it range from 0
+  //    to 1.
+  //    This is the X value in the texture map.
+  //    double phi = atan2(outNormal.x, outNormal.z);
+  //    double theta = asin(outNormal.y);
+  //    u = 0.5 + (phi / 2 * PI);
+  //    v = 0.5 + (theta / PI);
   auto phi = atan2(outNormal.z, outNormal.x);
   auto theta = asin(outNormal.y);
   u = 1 - (phi + PI) / (2 * PI);
   v = (theta + PI / 2) / PI;
 }
+*/
 
 // -------------------------------------------------
 
