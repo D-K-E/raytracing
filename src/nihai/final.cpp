@@ -13,7 +13,6 @@
 #include <custom/nihai/material2.hpp>
 //
 #include <custom/nihai/sphere2.hpp>
-//
 #include <filesystem>
 #include <iostream>
 //
