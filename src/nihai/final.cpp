@@ -205,7 +205,7 @@ int main(void) {
   double aspect_ratio = 16.0 / 9.0;
   const int imwidth = 600;
   const int imheight = static_cast<int>(imwidth / aspect_ratio);
-  int pixel_sample = 200;
+  int pixel_sample = 100;
   int mdepth = 50;
   int wslicelen = int(imwidth / THREAD_NB);
   immat imvec(imwidth, std::vector<color>(imheight, color(0)));
