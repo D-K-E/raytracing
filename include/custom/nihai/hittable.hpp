@@ -42,6 +42,26 @@ public:
 
   virtual vec3 random(const vec3 &o) const { return vec3(1, 0, 0); }
 };
+class FlipFace : public Hittable {
+public:
+  FlipFace(shared_ptr<Hittable> p) : ptr(p) {}
+
+  virtual bool hit(const Ray &r, double t_min, double t_max,
+                   HitRecord &rec) const {
+    if (!ptr->hit(r, t_min, t_max, rec))
+      return false;
+
+    rec.front_face = !rec.front_face;
+    return true;
+  }
+
+  virtual bool bounding_box(double t0, double t1, Aabb &output_box) const {
+    return ptr->bounding_box(t0, t1, output_box);
+  }
+
+public:
+  shared_ptr<Hittable> ptr;
+};
 
 class Translate : public Hittable {
 public:
