@@ -1,9 +1,9 @@
 #ifndef TEXTURE_HPP
 #define TEXTURE_HPP
-#include <custom/sonraki/commons.hpp>
-#include <custom/sonraki/perlin.hpp>
+#include <custom/nihai/commons.hpp>
+#include <custom/nihai/perlin.hpp>
 //
-#include <custom/sonraki/image.hpp>
+#include <custom/nihai/image.hpp>
 //
 // ------------ texture utils ----------------------
 

@@ -55,10 +55,10 @@ color ray_color(const ray &r, const color &background, const hittable &world,
 hittable_list cornell_box(camera &cam, double aspect) {
   hittable_list world;
 
-  auto red = make_shared<lambertian>(make_shared<solid_color>(.65, .05, .05));
-  auto white = make_shared<lambertian>(make_shared<solid_color>(.73, .73, .73));
-  auto green = make_shared<lambertian>(make_shared<solid_color>(.12, .45, .15));
-  auto light = make_shared<diffuse_light>(make_shared<solid_color>(15, 15, 15));
+  auto red = make_shared<lambertian>(make_shared<SolidColor>(.65, .05, .05));
+  auto white = make_shared<lambertian>(make_shared<SolidColor>(.73, .73, .73));
+  auto green = make_shared<lambertian>(make_shared<SolidColor>(.12, .45, .15));
+  auto light = make_shared<diffuse_light>(make_shared<SolidColor>(15, 15, 15));
 
   world.add(
       make_shared<flip_face>(make_shared<yz_rect>(0, 555, 0, 555, 555, green)));

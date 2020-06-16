@@ -25,7 +25,7 @@ public:
     double current_closest = dist_max;
     for (const shared_ptr<Hittable> &object : objects) {
       // int i=0; i < objects.size(); i++
-      if (object->hit(r, dist_min, dist_max, temp)) {
+      if (object->hit(r, dist_min, current_closest, temp)) {
         hit_ = true;
         current_closest = temp.dist;
         record = temp;

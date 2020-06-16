@@ -62,9 +62,9 @@ set ( ALL_LIBS
 #target_link_libraries(antialiasing.out ${ALL_LIBS})
 #install(TARGETS antialiasing.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/haftasonu/")
 # ------------------------------------
-#add_executable(diffuse.out "src/haftasonu/diffuse.cpp")
-#target_link_libraries(diffuse.out ${ALL_LIBS})
-#install(TARGETS diffuse.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/haftasonu/")
+add_executable(diffuse.out "src/haftasonu/diffuse.cpp")
+target_link_libraries(diffuse.out ${ALL_LIBS})
+install(TARGETS diffuse.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/haftasonu/")
 # ------------------------------------
 #add_executable(metal.out "src/haftasonu/metal.cpp")
 #target_link_libraries(metal.out ${ALL_LIBS})
@@ -185,9 +185,9 @@ set ( ALL_LIBS
 #install(TARGETS cornell6.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/nihai/")
 
 
-add_executable(final.out "src/nihai/final.cpp")
-target_link_libraries(final.out ${ALL_LIBS})
-install(TARGETS final.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/nihai/")
+#add_executable(final.out "src/nihai/final.cpp")
+#target_link_libraries(final.out ${ALL_LIBS})
+#install(TARGETS final.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/nihai/")
 
 #add_executable(final2.out "src/nihai/final2.cpp")
 #target_link_libraries(final2.out ${ALL_LIBS})

@@ -27,6 +27,30 @@ color ray_color(const Ray &r, const HittableList &scene, int depth) {
   double temp = 0.5 * (direction.y + 1.0);
   return (1.0 - temp) * color(1.0) + temp * color(0.5, 0.7, 1.0);
 }
+color ray_color2(const Ray &r, const HittableList &scene, int depth) {
+  // carpan isini renklendirir
+  Ray r_in = Ray(r.origin, r.direction);
+  color rcolor = color(1);
+  while (true) {
+    HitRecord record;
+    if (depth <= 0) {
+      // final case
+      return color(0);
+    }
+    if (scene.hit(r_in, 0.001, INF, record)) {
+      // recursive case
+      point3 target = record.point + random_in_hemisphere(record.normal);
+      r_in = Ray(record.point, target - record.point);
+      depth--;
+      rcolor *= 0.5;
+    } else {
+      vec3 direction = to_unit(r_in.direction);
+      double temp = 0.5 * (direction.y + 1.0);
+      rcolor *= (1.0 - temp) * color(1.0) + temp * color(0.5, 0.7, 1.0);
+      return rcolor;
+    }
+  }
+}
 
 int main(void) {
   // resmin yazma fonksiyonu
@@ -49,8 +73,8 @@ int main(void) {
 
   // konacak objelerin deklarasyonu
   HittableList scene;
-  scene.add(make_shared<Sphere>(point3(0.0, -100.5, -1.0), 100.0));
-  scene.add(make_shared<Sphere>(point3(0.0, 0.0, -1.0), 0.5));
+  scene.add(make_shared<Sphere2>(point3(0.0, -100.5, -1.0), 100.0));
+  scene.add(make_shared<Sphere2>(point3(0.0, 0.0, -1.0), 0.5));
   // deklarasyonu bitti
 
   // kamera
@@ -65,7 +89,7 @@ int main(void) {
         double u = double(i + random_double()) / (imwidth - 1);
         double v = double(j + random_double()) / (imheight - 1);
         Ray r = camera.get_ray(u, v);
-        rcolor += ray_color(r, scene, mdepth);
+        rcolor += ray_color2(r, scene, mdepth);
       }
       write_color(std::cout, rcolor, psample);
     }

@@ -5,7 +5,7 @@
 //
 #include <custom/nihai/pdf.hpp>
 //
-#include <custom/nihai/texture.hpp>
+#include <custom/nihai/texture2.hpp>
 //
 
 double schlick(double cosine, double ref_idx) {
@@ -77,7 +77,7 @@ public:
 
 class diffuse_light : public material {
 public:
-  diffuse_light(shared_ptr<texture> a) : emit(a) {}
+  diffuse_light(shared_ptr<Texture> a) : emit(a) {}
 
   virtual color emitted(const ray &r_in, const hit_record &rec, double u,
                         double v, const point3 &p) const {
@@ -87,12 +87,12 @@ public:
   }
 
 public:
-  shared_ptr<texture> emit;
+  shared_ptr<Texture> emit;
 };
 
 class isotropic : public material {
 public:
-  isotropic(shared_ptr<texture> a) : albedo(a) {}
+  isotropic(shared_ptr<Texture> a) : albedo(a) {}
 
   virtual bool scatter(const ray &r_in, const hit_record &rec,
                        color &attenuation, ray &scattered) const {
@@ -102,12 +102,12 @@ public:
   }
 
 public:
-  shared_ptr<texture> albedo;
+  shared_ptr<Texture> albedo;
 };
 
 class lambertian : public material {
 public:
-  lambertian(shared_ptr<texture> a) : albedo(a) {}
+  lambertian(shared_ptr<Texture> a) : albedo(a) {}
 
   virtual bool scatter(const ray &r_in, const hit_record &rec,
                        scatter_record &srec) const {
@@ -124,7 +124,7 @@ public:
   }
 
 public:
-  shared_ptr<texture> albedo;
+  shared_ptr<Texture> albedo;
 };
 
 class metal : public material {

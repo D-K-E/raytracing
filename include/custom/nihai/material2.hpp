@@ -3,11 +3,8 @@
 //
 #include <custom/nihai/commons.hpp>
 //
-#include <custom/nihai/hittable.hpp>
-//
 #include <custom/nihai/texture.hpp>
 //
-#include <custom/nihai/onb.hpp>
 #include <custom/nihai/pdf.hpp>
 //
 struct ScatterRecord {
@@ -23,15 +20,6 @@ public:
                        ScatterRecord &sre) const {
     return false;
   };
-  virtual bool scatter(const Ray &ray_in, const HitRecord &record,
-                       vec3 &attenuation, Ray &r_out, double &pdf) const {
-    return false;
-  };
-  virtual bool scatter(const Ray &ray_in, const HitRecord &record,
-                       vec3 &attenuation, Ray &r_out) const {
-    return false;
-  };
-
   virtual double pdf_scattering(const Ray &ray_in, const HitRecord &record,
                                 const Ray &ray_out) const {
     // checked
@@ -39,9 +27,6 @@ public:
   }
   virtual color emitted(const Ray &r_in, const HitRecord &record, double u,
                         double v, const point3 &p) const {
-    return color(0);
-  }
-  virtual color emitted(double u, double v, const point3 &p) const {
     return color(0);
   }
   virtual const char *mat_type() const { return mtype; }
@@ -140,14 +125,10 @@ public:
   DiffuseLight(shared_ptr<Texture> t) : emit(t) {}
   virtual color emitted(const Ray &r_in, const HitRecord &record, double u,
                         double v, const point3 &p) const;
-  virtual color emitted(double u, double v, const point3 &p) const;
 };
 color DiffuseLight::emitted(const Ray &r_in, const HitRecord &record, double u,
                             double v, const point3 &p) const {
   return (record.front_face) ? emit->value(u, v, p) : color(0);
-}
-color DiffuseLight::emitted(double u, double v, const point3 &p) const {
-  return emit->value(u, v, p);
 }
 
 class Isotropic : public Material {
