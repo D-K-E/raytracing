@@ -38,7 +38,6 @@ public:
   virtual bool bounding_box(double t0, double t1, Aabb &output_bbox) const = 0;
 };
 
-<<<<<<< HEAD
 class Translate : public Hittable {
   //
 public:
@@ -166,7 +165,7 @@ class RotateZ : public Rotator {
 public:
   RotateZ(shared_ptr<Hittable> _ptr, double angle_degree)
       : Rotator(_ptr, angle_degree, vec3(0, 0, 1)) {}
-=======
+};
 class FlipFace : public Hittable {
 public:
   shared_ptr<Hittable> ptr;
@@ -184,7 +183,6 @@ public:
   virtual bool bounding_box(double t0, double t1, Aabb &output_box) const {
     return ptr->bounding_box(t0, t1, output_box);
   }
->>>>>>> 31416e3fca58118c3e2f258c92d5deecf5dc9e36
 };
 
 #endif

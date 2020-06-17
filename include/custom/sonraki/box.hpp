@@ -20,7 +20,6 @@ public:
       : bmin(p0), bmax(p1) {
     //
     sides.add(make_shared<XYRect>(p0.x, p1.x, p0.y, p1.y, p1.z, ptr));
-<<<<<<< HEAD
     sides.add(make_shared<XYRect>(p0.x, p1.x, p0.y, p1.y, p0.z, ptr));
 
     sides.add(make_shared<XZRect>(p0.x, p1.x, p0.z, p1.z, p1.y, ptr));
@@ -28,7 +27,7 @@ public:
 
     sides.add(make_shared<YZRect>(p0.y, p1.y, p0.z, p1.z, p1.x, ptr));
     sides.add(make_shared<YZRect>(p0.y, p1.y, p0.z, p1.z, p0.x, ptr));
-=======
+    /*
     sides.add(make_shared<FlipFace>(
         make_shared<XYRect>(p0.x, p1.x, p0.y, p1.y, p0.z, ptr)));
 
@@ -39,7 +38,7 @@ public:
     sides.add(make_shared<YZRect>(p0.y, p1.y, p0.z, p1.z, p1.x, ptr));
     sides.add(make_shared<FlipFace>(
         make_shared<YZRect>(p0.y, p1.y, p0.z, p1.z, p0.x, ptr)));
->>>>>>> 31416e3fca58118c3e2f258c92d5deecf5dc9e36
+        */
   }
   bool hit(const Ray &r, double t0, double t1, HitRecord &rec) const {
     return sides.hit(r, t0, t1, rec);
@@ -48,11 +47,8 @@ public:
     output_box = Aabb(bmin, bmax);
     return true;
   }
-<<<<<<< HEAD
   point3 min() const { return bmin; }
   point3 max() const { return bmax; }
-=======
->>>>>>> 31416e3fca58118c3e2f258c92d5deecf5dc9e36
 };
 
 #endif

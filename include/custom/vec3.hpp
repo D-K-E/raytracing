@@ -31,8 +31,9 @@ inline vec3 cross(const vec3 &u, const vec3 &v) {
               u.x * v.y - u.y * v.x);
 }
 inline vec3 to_unit(vec3 v) { return glm::normalize(v); }
+inline vec3 unit_vector(vec3 v) { return to_unit(v); }
 inline double length(vec3 v) { return glm::length(v); }
-inline double length_sqr(vec3 v) { return length(v) * length(v); }
+inline double length_squared(vec3 v) { return length(v) * length(v); }
 inline static vec3 random_vec() {
   // rastgele vektor uretiyor
   return vec3(random_double(), random_double(), random_double());
@@ -104,6 +105,29 @@ void to_spheric(const vec3 &v, double &phi, double &theta) {
   theta = asin(v2.y);
   // phi = atan2(v.z, v.x);
   // theta = asin(v.y);
+}
+inline vec3 random_cosine_direction() {
+  double r1 = random_double();
+  double r2 = random_double();
+  double z = sqrt(1 - r2);
+
+  double phi = 2 * PI * r1;
+  double x = cos(phi) * sqrt(r2);
+  double y = sin(phi) * sqrt(r2);
+
+  return vec3(x, y, z);
+}
+
+inline vec3 random_to_sphere(double radius, double distance_squared) {
+  double r1 = random_double();
+  double r2 = random_double();
+  double z = 1 + r2 * (sqrt(1 - radius * radius / distance_squared) - 1);
+
+  double phi = 2 * PI * r1;
+  double x = cos(phi) * sqrt(1 - z * z);
+  double y = sin(phi) * sqrt(1 - z * z);
+
+  return vec3(x, y, z);
 }
 
 #endif

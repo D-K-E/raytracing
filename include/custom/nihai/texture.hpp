@@ -7,7 +7,7 @@
 #include <custom/stb_image_write.h>
 //
 #include <custom/nihai/commons.hpp>
-#include <custom/nihai/perlin2.hpp>
+#include <custom/nihai/perlin.hpp>
 //
 //
 // ------------ texture utils ----------------------

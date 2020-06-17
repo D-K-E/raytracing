@@ -1,25 +1,25 @@
 //
 //
-#include <custom/nihai/commons.hpp>
+#include <custom/nihai2/commons.hpp>
 //
-#include <custom/nihai/hittables.hpp>
+#include <custom/nihai2/hittables.hpp>
 //
-#include <custom/nihai/camera.hpp>
-#include <custom/nihai/color.hpp>
+#include <custom/nihai2/camera.hpp>
+#include <custom/nihai2/color.hpp>
 //
-#include <custom/nihai/aarect.hpp>
+#include <custom/nihai2/aarect.hpp>
 //
-#include <custom/nihai/box.hpp>
-#include <custom/nihai/material.hpp>
+#include <custom/nihai2/box.hpp>
+#include <custom/nihai2/material.hpp>
 //
-#include <custom/nihai/sphere.hpp>
+#include <custom/nihai2/sphere.hpp>
 #include <filesystem>
 #include <iostream>
 //
 
-color ray_color(const ray &r, const color &background, const hittable &world,
-                shared_ptr<hittable> lights, int depth) {
-  hit_record rec;
+color ray_color(const Ray &r, const color &background, const Hittable &world,
+                shared_ptr<Hittable> lights, int depth) {
+  HitRecord rec;
 
   // If we've exceeded the ray bounce limit, no more light is gathered.
   if (depth <= 0)
@@ -32,17 +32,16 @@ color ray_color(const ray &r, const color &background, const hittable &world,
   scatter_record srec;
   color emitted = rec.mat_ptr->emitted(r, rec, rec.u, rec.v, rec.p);
 
-  if (!rec.mat_ptr->scatter(r, rec, srec)) {
+  if (!rec.mat_ptr->scatter(r, rec, srec))
     return emitted;
-  }
 
   if (srec.is_specular) {
     return srec.attenuation *
            ray_color(srec.specular_ray, background, world, lights, depth - 1);
   }
 
-  auto light_ptr = make_shared<hittable_pdf>(lights, rec.p);
-  mixture_pdf p(light_ptr, srec.pdf_ptr);
+  auto light_ptr = make_shared<HittablePdf>(lights, rec.p);
+  MixturePdf p(light_ptr, srec.pdf_ptr);
   ray scattered = ray(rec.p, p.generate(), r.time());
   auto pdf_val = p.value(scattered.direction());
   auto rcolor =
@@ -53,12 +52,12 @@ color ray_color(const ray &r, const color &background, const hittable &world,
   return rcolor;
 }
 
-hittable_list cornell_box(camera &cam, double aspect) {
-  hittable_list world;
+HittableList cornell_box(camera &cam, double aspect) {
+  HittableList world;
 
-  auto red = make_shared<lambertian>(make_shared<SolidColor>(.65, .05, .05));
-  auto white = make_shared<lambertian>(make_shared<SolidColor>(.73, .73, .73));
-  auto green = make_shared<lambertian>(make_shared<SolidColor>(.12, .45, .15));
+  auto red = make_shared<Lambertian>(make_shared<SolidColor>(.65, .05, .05));
+  auto white = make_shared<Lambertian>(make_shared<SolidColor>(.73, .73, .73));
+  auto green = make_shared<Lambertian>(make_shared<SolidColor>(.12, .45, .15));
   auto light = make_shared<diffuse_light>(make_shared<SolidColor>(15, 15, 15));
 
   world.add(

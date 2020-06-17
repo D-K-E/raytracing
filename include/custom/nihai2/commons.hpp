@@ -12,6 +12,6 @@
 #include <custom/functions.hpp>
 #include <custom/vec3.hpp>
 //
-#include <custom/nihai/ray.hpp>
+#include <custom/nihai2/ray.hpp>
 
 #endif
