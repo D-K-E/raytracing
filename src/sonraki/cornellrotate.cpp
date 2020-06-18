@@ -20,7 +20,7 @@
 //
 #include <future>
 //
-#define THREAD_NB 4
+#define THREAD_NB 5
 using immat = std::vector<std::vector<color>>;
 //
 namespace fs = std::filesystem;

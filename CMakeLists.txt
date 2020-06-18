@@ -93,9 +93,9 @@ install(TARGETS diffuse.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/haftasonu/")
 #add_executable(twoperlin.out "src/sonraki/twoperlin.cpp")
 #target_link_libraries(twoperlin.out ${ALL_LIBS})
 #install(TARGETS twoperlin.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
-#add_executable(twoperlinmulti.out "src/sonraki/twoperlinmulti.cpp")
-#target_link_libraries(twoperlinmulti.out ${ALL_LIBS})
-#install(TARGETS twoperlinmulti.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
+add_executable(twoperlinmulti.out "src/sonraki/twoperlinmulti.cpp")
+target_link_libraries(twoperlinmulti.out ${ALL_LIBS})
+install(TARGETS twoperlinmulti.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
 
 
 
@@ -103,9 +103,9 @@ install(TARGETS diffuse.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/haftasonu/")
 #target_link_libraries(imtexture.out ${ALL_LIBS})
 #install(TARGETS imtexture.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
 
-#add_executable(imlighttexture.out "src/sonraki/imlighttexture.cpp")
-#target_link_libraries(imlighttexture.out ${ALL_LIBS})
-#install(TARGETS imlighttexture.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
+add_executable(imlighttexture.out "src/sonraki/imlighttexture.cpp")
+target_link_libraries(imlighttexture.out ${ALL_LIBS})
+install(TARGETS imlighttexture.out DESTINATION "${PROJECT_SOURCE_DIR}/bin/sonraki/")
 
 add_executable(cornell.out "src/sonraki/cornell.cpp")
 target_link_libraries(cornell.out ${ALL_LIBS})
