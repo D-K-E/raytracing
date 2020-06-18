@@ -68,17 +68,6 @@ HittableList cornell_box() {
       make_shared<DiffuseLight>(make_shared<SolidColor>(15.0, 15.0, 15.0));
 
   // --------- objects -------------------
-  /*
-  scene.add(
-      make_shared<FlipFace>(make_shared<YZRect>(0, 555, 0, 555, 555, green)));
-  scene.add(make_shared<YZRect>(0, 555, 0, 555, 0, red));
-  scene.add(make_shared<XZRect>(213, 343, 227, 332, 554, light));
-  scene.add(
-      make_shared<FlipFace>(make_shared<XZRect>(0, 555, 0, 555, 0, white)));
-  scene.add(make_shared<XZRect>(0, 555, 0, 555, 555, white));
-  scene.add(
-      make_shared<FlipFace>(make_shared<XYRect>(0, 555, 0, 555, 555, white)));
-      */
   scene.add(make_shared<YZRect>(0, 555, 0, 555, 555, green));
   scene.add(make_shared<YZRect>(0, 555, 0, 555, 0, red));
   scene.add(make_shared<XZRect>(213, 343, 227, 332, 554, light));
@@ -172,10 +161,10 @@ void joinRet2Imv(InnerRet ret, immat &imvec, double imheight) {
 int main(void) {
   // resmin yazma fonksiyonu
   double aspect_ratio = 16.0 / 9.0;
-  const int imwidth = 640;
+  const int imwidth = 320;
   const int imheight = static_cast<int>(imwidth / aspect_ratio);
-  int pixel_sample = 100;
-  int mdepth = 50;
+  int pixel_sample = 220;
+  int mdepth = 80;
   int wslicelen = int(imwidth / THREAD_NB);
   immat imvec(imwidth, std::vector<color>(imheight, color(0)));
 

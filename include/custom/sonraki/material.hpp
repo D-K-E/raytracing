@@ -27,9 +27,9 @@ public:
   const char *mtype = "Lambertian";
 
 public:
-  Lambertian(shared_ptr<Texture> a) : albedo(a){};
+  Lambertian(shared_ptr<Texture> a) : albedo(a) {}
   bool scatter(const Ray &ray_in, const HitRecord &record, color &attenuation,
-               Ray &ray_out) const {
+               Ray &ray_out) const override {
     // isik kirilsin mi kirilmasin mi
     vec3 out_dir = record.normal + random_unit_vector();
     ray_out = Ray(record.point, out_dir, ray_in.time());
@@ -49,7 +49,7 @@ public:
     roughness = rough;
   }
   bool scatter(const Ray &ray_in, const HitRecord &record, color &attenuation,
-               Ray &ray_out) const {
+               Ray &ray_out) const override {
     // isik kirilsin mi kirilmasin mi
     vec3 unit_in_dir = to_unit(ray_in.direction);
     vec3 out_dir = reflect(unit_in_dir, record.normal);
@@ -103,7 +103,7 @@ public:
     return fresnel;
   }
   bool scatter(const Ray &r_in, const HitRecord &record, color &attenuation,
-               Ray &r_out) const {
+               Ray &r_out) const override {
     // ray out
     attenuation = color(1.0);
     vec3 unit_in_dir = to_unit(r_in.direction);
@@ -137,13 +137,13 @@ public:
   //
 public:
   DiffuseLight(shared_ptr<Texture> t) : emit(t) {}
-  virtual bool scatter(const Ray &ray_in, const HitRecord &record,
-                       color &attenuation, Ray &ray_out) const {
+  bool scatter(const Ray &ray_in, const HitRecord &record, color &attenuation,
+               Ray &ray_out) const override {
     //
     // std::cerr << "scatter color: " << std::endl;
     return false;
   }
-  virtual color emitted(double u, double v, const point3 &p) const {
+  color emitted(double u, double v, const point3 &p) const override {
     //
     color emitColor = emit->value(u, v, p);
     return emitColor;
@@ -156,8 +156,8 @@ public:
 
 public:
   Isotropic(shared_ptr<Texture> a) : albedo(a) {}
-  virtual bool scatter(const Ray &r_in, const HitRecord &rec,
-                       color &attenuation, Ray &scattered) const {
+  bool scatter(const Ray &r_in, const HitRecord &rec, color &attenuation,
+               Ray &scattered) const override {
     /*
     As the ray passes through the volume, it may scatter at any point. The
     denser the volume, the more likely that is. The probability that the ray
